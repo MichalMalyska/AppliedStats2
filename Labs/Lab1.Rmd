@@ -1,0 +1,12 @@
+---
+title: "Lab 1"
+author: "Michal Malyska"
+date: "08/01/2020"
+output: html_document
+---
+
+```{r Setup}
+
+library(tidyverse)
+
+```

@@ -1,0 +1,246 @@
+---
+title: "Lab2"
+author: "Michal Malyska"
+date: "15/01/2020"
+output: pdf_document
+---
+
+```{r setup}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+
+set.seed(1337)
+library(opendatatoronto)
+library(kableExtra)
+library(tidyverse)
+library(stringr)
+library(skimr)
+library(visdat)
+library(janitor)
+library(lubridate)
+library(ggrepel)
+library(tidylog)
+```
+
+
+# Lab Exercises
+
+To be handed in via submission of Rmd file to GitHub by Thursday 16 January, 5pm.
+
+1. Using the `opendatatoronto` package, download the data on mayoral campaign contributions for 2014. (note: the 2014 file you will get from `get_resource`, so just keep the sheet that relates to the Mayor election). 
+
+2. Clean up the data format (fixing the parsing issue and standardizing the column names using `janitor`)
+
+3. Summarize the variables in the dataset. Are there missing values, and if so, should we be worried about them? Is every variable in the format it should be? If not, create new variable(s) that are in the right format.
+
+4. Visually explore the distribution of values of the contributions. What contributions are notable outliers? Do they share a similar characteristic(s)? It may be useful to plot the distribution of contributions without these outliers to get a better sense of the majority of the data. 
+
+5. List the top five candidates in each of these categories:
+    + total contributions
+    + mean contribution
+    + number of contributions
+
+6. Repeat 5 but without contributions from the candidates themselves.
+
+7. How many contributors gave money to more than one candidate? 
+
+
+# Data Import (Question 1)
+
+```{r Get data}
+all_data <- opendatatoronto::list_packages(limit = 500)
+election_resources <- opendatatoronto::list_package_resources("f6651a40-2f52-46fc-9e04-b760c16edd5c")
+elections <- opendatatoronto::get_resource("d99bb1f3-949a-4497-bb96-c93bbd203130")
+contributions_orig <- elections$`2_Mayor_Contributions_2014_election.xls`
+
+```
+
+## Cleaning names and Col Types (Question 2)
+
+```{r Cleaning Names and Coltypes}
+
+contributions <- contributions_orig %>%
+	janitor::row_to_names(1) %>%
+	janitor::clean_names()
+
+contributions <- contributions %>% readr::type_convert()
+
+```
+
+## Data Wrangling stuff (Question 3)
+
+```{r Data Skim}
+skimmed <- skimr::skim(contributions)
+
+skimmed %>% select(-numeric.hist) %>% kable()
+```
+
+```{r Data Wrangling}
+contributions <- contributions %>% janitor::remove_empty()
+```
+
+Ward is all missing so it will get removed by remove_empty. A couple of variables
+are pretty much all missing contributors_address, goods_or_service_desc,
+relationship_to_candidate, president_business_manager, authorized_representative.
+Most of them pertain to companies and there seem to be only `r length(contributions %>% filter(!is.na(contributors_address)))` corporate contributions.
+They are the ones with non-missing address. They have all other values non missing
+except for relationship to candidate. That variable has `r length(contributions %>% filter(!is.na(relationship_to_candidate)))` 
+
+There are `r length(unique(contributions %>% pull(contributors_name)))` unique contributors that 
+gave a total of `r length(contributions$contributors_name)` contributions. 
+
+There are a few very large values for contributions, they were all given to 
+the candidates by themselves.
+
+```{r Contributions}
+
+contributions %>% filter(!is.na(relationship_to_candidate)) %>%
+	arrange(contribution_amount) %>%
+	kableExtra::kable()
+
+```
+
+# Data Summary (Question 4)
+
+The summary of contribution monetary values is below. It is done separately
+based on relationship to candidate.
+
+```{r Data Summaries}
+
+numerics <- contributions %>% select_if(is.numeric)
+
+numerics_summary <- numerics %>%
+	summarize_all(.funs = funs(n_unique = sum(!is.na(.)),
+							   mean = mean(.),
+							   median = median(.),
+							   sd = sd(.),
+							   min = min(.),
+							   max = max(.)))
+
+numerics_summary %>% kableExtra::kable()
+
+numerics_hist <- contributions %>%
+	mutate(relation_contributed = if_else(is.na(relationship_to_candidate),
+										  "Outside Contribution",
+										  relationship_to_candidate)) %>%
+	ggplot() +
+	aes(x = contribution_amount) +
+	geom_histogram(bins = 38) +
+	theme_minimal() +
+	labs(title = "Histograms of Contribution amounts") +
+	facet_wrap(.~relation_contributed, scales = "free", shrink = TRUE)
+
+numerics_hist
+```
+
+Clearly the contributions from the general public tend to be between 0 and 3000,
+with clear spikes at round numbers like 1000, 2000, 2500. The contributions from
+people with a relation to the candidate are extremely varied, the spousal ones 
+tend to be very close to the general public, while the candidates like to give
+themselves a lot of money. 
+
+# Question 5
+
+```{r groupbys }
+contributions_summary_q5 <- contributions %>%
+	group_by(candidate) %>%
+	summarize(total_contributions = sum(contribution_amount),
+			  mean_contributions = mean(contribution_amount),
+			  number_contributions = n())
+```
+
+
+Top total contributions:
+
+```{r top total }
+
+top_5_total <- contributions_summary_q5 %>%
+	arrange(desc(total_contributions)) %>%
+	top_n(n = 5, wt = total_contributions)
+
+top_5_total %>% kable()
+```
+
+Top average contributions:
+
+```{r top mean }
+
+top_5_mean <- contributions_summary_q5 %>%
+	arrange(desc(mean_contributions)) %>%
+	top_n(n = 5, wt = mean_contributions)
+
+top_5_mean %>% kable()
+```
+
+Top number of contributions:
+
+```{r top number }
+
+top_5_number <- contributions_summary_q5 %>%
+	arrange(desc(number_contributions)) %>%
+	top_n(n = 5, wt = number_contributions)
+
+top_5_number %>% kable()
+
+```
+
+# Question 6
+
+```{r groupbys q6}
+contributions_summary_q6 <- contributions %>%
+	filter(relationship_to_candidate == "Spouse" | is.na(relationship_to_candidate)) %>%
+	group_by(candidate) %>%
+	summarize(total_contributions = sum(contribution_amount),
+			  mean_contributions = mean(contribution_amount),
+			  number_contributions = n())
+```
+
+
+Top total contributions:
+
+```{r top total q6}
+
+top_5_total <- contributions_summary_q6 %>%
+	arrange(desc(total_contributions)) %>%
+	top_n(n = 5, wt = total_contributions)
+
+top_5_total %>% kable()
+```
+
+Top average contributions:
+
+```{r top mean q6}
+
+top_5_mean <- contributions_summary_q6 %>%
+	arrange(desc(mean_contributions)) %>%
+	top_n(n = 5, wt = mean_contributions)
+
+top_5_mean %>% kable()
+```
+
+Top number of contributions:
+
+```{r top number q6}
+
+top_5_number <- contributions_summary_q6 %>%
+	arrange(desc(number_contributions)) %>%
+	top_n(n = 5, wt = number_contributions)
+
+top_5_number %>% kable()
+
+```
+
+# Question 7
+
+```{r money to more than one candidate}
+
+contributions_q7 <- contributions %>%
+	select(contributors_name, candidate) %>%
+	distinct() %>% 
+	group_by(contributors_name) %>%
+	summarize(num_candidates = n()) %>%
+	filter(num_candidates > 1)
+
+```
+
+There were `r length(contributions_q7$num_candidates)` people who gave money to
+more than one candidate. 

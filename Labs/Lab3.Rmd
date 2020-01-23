@@ -33,6 +33,8 @@ Read it in and have a look to see what's in there. Variables are
 ```{r library load}
 library(tidyverse)
 library(here)
+library(kableExtra)
+library(GGally)
 d <- read_rds(here("data", "infant.RDS"))
 head(d)
 ```
@@ -157,6 +159,9 @@ summary(mod_age_norm)
 ## Question 4
 
 ```{r extract coefficients}
+
+GGally::ggcoef(mod_age_norm,exponentiate = TRUE) +
+	labs(title = "Coefficients of logistic regression")
 
 coefs <- mod_age_norm$coefficients
 

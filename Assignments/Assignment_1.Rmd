@@ -1,0 +1,645 @@
+---
+title: "Assignment 1"
+author: "Michal Malyska"
+date: "23/01/2020"
+output: pdf_document
+---
+
+```{r setup}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+
+library(tidyverse)
+library(here)
+library(aod)
+library(corrplot)
+theme_set(theme_minimal())
+
+```
+
+# Question 1
+
+$$
+p(y | \theta, \phi) = exp \left( \frac{y \theta - b(\theta)}{\phi} - c(y, \theta) \right)
+$$
+
+## a)
+
+Show $$\int \frac{dp}{d\theta} dy = 0$$ and $$\int \frac{d^2p}{d\theta^2} dy = 0$$
+
+### i)
+Showing:
+
+$$
+\int \frac{dp}{d\theta} dy = 0
+$$
+
+
+$$
+\begin{aligned}
+\int \frac{dp}{d\theta} dy &= \\
+&= \frac{d}{d\theta} \int p dy \\
+&= \frac{d}{d\theta} \int exp \left( \frac{y \theta - b(\theta)}{\phi} - c(y, \phi) \right) dy \\
+&= \frac{d}{d\theta}(1) = 0
+\end{aligned}
+$$
+
+### ii) 
+
+Showing:
+
+$$
+\int \frac{d^2p}{d\theta^2} dy = 0
+$$
+
+$$
+\begin{aligned}
+\int \frac{dp}{d\theta} dy &=  \frac{d^2}{d\theta^2} \int p dy \\
+&= \frac{d^2}{d\theta^2} \int exp \left( \frac{y \theta - b(\theta)}{\phi} - c(y, \phi) \right) dy \\
+&= \frac{d^2}{d\theta^2}(1) = 0
+\end{aligned}
+$$
+
+## b
+
+### i)
+
+Showing $\mathbb{E}[Y] = b'(\theta)$
+
+$$
+\begin{aligned}
+\frac{dp}{d\theta} &= \frac{d}{d\theta} \left( exp \left( \frac{y \theta - b(\theta)}{\phi} - c(y, \phi) \right) \right) \\
+&= exp \left( \frac{y \theta - b(\theta)}{\phi} - c(y, \phi) \right) * \frac{d}{d\theta} \left( \frac{y \theta - b(\theta)}{\phi} - c(y, \theta) \right) \\
+&= p * \left( \frac{y}{\phi} - \frac{b'(\theta)}{\phi} \right) \\
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+0 &= \int \frac{dp}{d\theta} dy \\
+&= \int p * \left( \frac{y}{\phi} - \frac{b'(\theta)}{\phi} \right) dy \\
+&= \frac{1}{\phi} (\mathbb{E}[Y] - b'(\theta)) \\
+&\implies \mathbb{E}[Y] = b'(\theta)
+\end{aligned}
+$$
+
+### ii) 
+
+Showing $\mathbb{V}ar(Y) = \phi b''(\theta)$
+
+$$
+\begin{aligned}
+\frac{d^2p}{d\theta^2} &= \frac{d^2}{d\theta^2} \left( exp \left( \frac{y \theta - b(\theta)}{\phi} - c(y, \phi) \right) \right) \\
+&= \frac{d}{d\theta}\left( exp \left( \frac{y \theta - b(\theta)}{\phi} - c(y, \phi) \right) * \frac{d}{d\theta} \left( \frac{y \theta - b(\theta)}{\phi} - c(y, \theta) \right) \right) \\
+&= \frac{d}{d\theta}\left(p * \left( \frac{y}{\phi} - \frac{b'(\theta)}{\phi} \right) \right) \\
+&= \frac{dp}{d\theta} \left( \frac{y}{\phi} - \frac{b'(\theta)}{\phi} \right) - p * \left(  \frac{b''(\theta)}{\phi} \right)
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+0 &= \int \frac{d^2p}{d\theta^2} dy \\
+&= \int \frac{dp}{d\theta} \left( \frac{y}{\phi} - \frac{b'(\theta)}{\phi} \right) - p * \left(  \frac{b''(\theta)}{\phi} \right) dy \\
+&= \int \frac{dp}{d\theta} \left( \frac{y}{\phi} - \frac{b'(\theta)}{\phi} \right) dy - \int p * \left(  \frac{b''(\theta)}{\phi} \right) dy \\
+&= \int p * \left( \frac{y}{\phi} - \frac{b'(\theta)}{\phi} \right)^2 dy - \frac{b''(\theta)}{\phi}  \\ 
+&= \frac{1}{\phi^2} \left( \mathbb{V}ar[Y] + 0  - \phi b''(\theta) \right) \\
+&\implies \mathbb{V}ar[Y] = \phi b''(\theta)
+\end{aligned}
+$$
+
+## c 
+
+### i)
+
+Showing that $\mathbb{E}[\frac{dl}{d\theta}] = 0$
+
+I will denote $l = l(\theta)$ for simplicity
+
+$$
+\begin{aligned}
+\mathbb{E}[\frac{dl}{d\theta}] &= \mathbb{E}\left[ \frac{d}{d\theta} \left( \frac{y \theta - b(\theta)}{\phi} - c(y, \phi) \right)\right] \\
+&= \mathbb{E}\left[ \frac{y - b'(\theta)}{\phi} \right] \\
+&= \frac{1}{\phi} (\mathbb{E}\left[ y \right]- b'(\theta) ) = 0
+\end{aligned}
+$$
+
+### ii) 
+
+Showing that $\mathbb{V}ar[\frac{dl}{d\theta}] = \phi^{-1} b''(\theta)$
+
+$$
+\begin{aligned}
+\mathbb{V}ar \left[ \frac{dl}{d\theta} \right] &= \mathbb{E}\left[ \left( \frac{dl}{d\theta} \right)^2 \right] \\
+&= - \mathbb{E} \left[ \frac{d^2l}{d\theta^2} \right] \\
+&= - \mathbb{E} \left[ \frac{d}{d\theta} \left( \frac{y - b'(\theta)}{\phi} \right) \right] \\
+&=  \mathbb{E} \left[ \left( \frac{b''(\theta)}{\phi} \right) \right] \\
+&=  \frac{b''(\theta)}{\phi}
+\end{aligned}
+$$
+
+# Question 2
+
+## a
+
+$Y | \theta \sim Poisson(\mu \theta)$
+
+$\mathbb{E}[\theta] = 1$ and $\mathbb{V}ar[\theta] = \sigma^2$
+
+### i)
+
+Showing $\mathbb{E}[Y] = \mu$
+
+$$
+\begin{aligned}
+\mathbb{E}[Y] &= \mathbb{E}\left[\mathbb{E}[Y|\theta]\right] \\
+&= \mathbb{E}\left[\mathbb{E}\left[\frac{{e^{ - \mu\theta } (\mu\theta) ^y }}{{y!}}\right]\right] \\
+&= \mathbb{E}\left[ \mu \theta \right] \\
+&= \mu
+\end{aligned}
+$$
+
+### ii)
+
+Showing $\mathbb{V}ar[Y] = \mu(1+\mu\sigma^2)$
+
+$$
+\begin{aligned}
+\mathbb{V}ar[Y] &= \mathbb{E}\left[\mathbb{V}ar(Y|\theta) \right] + \mathbb{V}ar\left[\mathbb{E}(Y|\theta) \right]\\
+&= \mathbb{E}\left[ \mu \theta \right] +  \mathbb{V}ar\left[ \mu \theta \right] \\
+&= \mu + \mu^2\sigma^2 \\
+&= \mu(1+\mu\sigma^2)
+\end{aligned}
+$$
+
+## b 
+
+Assume $\theta \sim \Gamma(\alpha, \beta)$
+
+Showing $Y \sim Neg Bin$
+
+$$
+\begin{aligned}
+p(y) &= \int p(y|\theta) p(\theta) d\theta\\
+&= \int \frac{{e^{ - \mu\theta } (\mu\theta) ^y }}{{y!}}*\frac{ \theta^{\alpha-1}e^{-\theta / \beta}}{\beta^\alpha\Gamma(\alpha)} d\theta \\
+&= \frac{\mu^y}{\beta^{\alpha} \Gamma(\alpha) y!} \int e^{-\mu\theta} \theta^{y} \theta^{\alpha-1} e^{- \theta / \beta} d\theta \\
+&= \frac{\mu^y}{\beta^{\alpha}\Gamma(\alpha) y!} \int e^{-(\mu + 1/\beta)\theta} \theta^{y + \alpha -1} d\theta \\
+&= \frac{\mu^y}{\beta^{\alpha}\Gamma(\alpha) y!} * \left(\Gamma(y + \alpha) (\frac{\beta}{\beta \mu + 1})^{\alpha + y} \right) \\
+&= \frac{ \Gamma(y + \alpha)}{\Gamma(\alpha) \Gamma(y + 1)} * \frac{\mu^y\beta^{\alpha + y}}{\beta^{\alpha}} * \left( \beta\mu + 1 \right)^{-\alpha-y} \\
+&= \frac{ \Gamma(y + \alpha)}{\Gamma(\alpha) \Gamma(y + 1)} \left( \frac{\mu \beta}{\mu \beta + 1} \right)^y \left( \frac{1}{\mu \beta + 1} \right)^\alpha
+\end{aligned}
+
+$$
+
+
+$$
+\begin{aligned}
+p(y) &= \int p(y|\theta) p(\theta) d\theta\\
+&= \frac{ \Gamma(y + \alpha)}{\Gamma(\alpha) \Gamma(y + 1)} \left( \frac{\mu \beta}{\mu \beta + 1} \right)^y \left( \frac{1}{\mu \beta + 1} \right)^\alpha \\
+&= NB(\alpha, \frac{\mu \beta}{\mu \beta + 1})
+\end{aligned}
+$$
+
+
+## c
+
+$$
+\begin{aligned}
+\mathbb{E}[Y] &= \mu =\alpha \mu \beta  \implies \alpha\beta =1\\
+\mathbb{V}ar[Y] &= \mu + \mu^2 \sigma^2 = \alpha \mu\beta + \alpha \mu^2\beta^2 \implies \alpha\beta^2 = \sigma^2
+\end{aligned}
+$$
+
+
+$$
+\begin{aligned}
+\alpha = \frac{1}{\sigma^2}
+\\ \beta = \sigma^2
+\end{aligned}
+$$
+
+# Question 3
+
+I refactored the code a tiny bit cause it looked horrid
+
+```{r setup for Q3}
+set.seed(123)
+
+X <- matrix(NA, 100, 100)
+Y <- X
+for (i in 1:100) {
+	X[i, ] <- rnorm(100)
+	Y[i, ] <- rpois(100, lambda = exp(0.5 + X[i,] + 0.2 * X[i,] ^ 2))
+}
+
+```
+
+## a) Fitting poisson glm
+
+```{r poiss glm Q3a}
+
+
+coefs_matrix <- matrix(NA, 100, 3)
+ses_matrix <- matrix(NA, 100, 3)
+p_vals_check <- rep(NA, 100)
+
+for (i in 1:100) {
+	data_set <- tibble(x = X[i, ], y = Y[i, ])
+	mod <-
+		glm(formula = y ~ x + I(x ^ 2),
+			data = data_set,
+			family = poisson)
+	coefs_matrix[i, ] <- coefficients(mod)
+	ses_matrix[i, ] <- sqrt(diag(vcov(mod)))
+	p_vals_check[i] <-
+		wald.test(
+			b = coef(mod),
+			Sigma = vcov(mod),
+			Terms = 2,
+			H0 = 1
+		)$result$chi2[3]
+}
+
+```
+
+## b) coverage probability for 2SE on x 
+
+Since this is an MLE blah blah blah it's enough to look at normal CDF up to 2 sd
+so the coverage is `r pnorm(2)`
+
+The actual proportion of coefficients outside of the intervals is 
+`r sum(coefs_matrix[,2] + 2 * ses_matrix[,2] < 1) + sum(coefs_matrix[,2] - 2 * ses_matrix[,2] > 1)`
+which is 4% for a coverage probability of ~96%
+
+Is this valid for x? Not 100% since the variables are not independent, in principle
+they should be uncorrelated but in practice their cor is `r cor(X[i,], X[i,]^2)`
+this will definitely fudge with inference, but hopefully in a minor way.
+
+Also, doesn't really match the 95% CI thing. 
+
+## c) Wald tests
+
+```{r Wald Tests q3}
+p_vals <- rep(NA, 100)
+
+for (i in 1:100) {
+	W <- (coefs_matrix[i,2] - 1) / ses_matrix[i,2]
+	p_vals[i] <- 1 - (pnorm(abs(W)) - pnorm(-abs(W)))
+}
+
+```
+
+Test was rejected in `r sum(p_vals < 0.05)` case(s).
+
+```{r New data}
+set.seed(321)
+
+X2 <- matrix(NA, 100, 100)
+Y2 <- X2
+for (i in 1:100) {
+	weights <- ifelse(X[i,] > 1, 10, 1)
+	probs <- weights / sum(weights)
+	to_keep_2 <- sample(1:length(X[i,]), 25, prob = probs)
+	X2[i, ] <- X[i, to_keep_2]
+	Y2[i, ] <- Y[i, to_keep_2]
+}
+```
+
+## d)
+
+### GLMs
+```{r Fitting glms Q3d}
+
+coefs_matrix2 <- matrix(NA, 100, 3)
+ses_matrix2 <- matrix(NA, 100, 3)
+
+
+for (i in 1:100) {
+	data_set <- tibble(x = X2[i,], y = Y2[i,])
+	mod <- glm(formula = y ~ x + I(x ^ 2),
+			   data = data_set,
+			   family = poisson)
+	coefs_matrix2[i,] <- coefficients(mod)
+	ses_matrix2[i,] <- sqrt(diag(vcov(mod)))
+}
+
+num_inside_interval <-
+	sum(coefs_matrix2[, 2] + 2 * ses_matrix2[, 2] < 1) + sum(coefs_matrix2[, 2] - 2 * ses_matrix2[, 2] > 1)
+
+```
+
+### Coverage probabilities:
+
+The actual proportion of coefficients outside of the intervals is 
+`r num_inside_interval`
+which is `r num_inside_interval`% for a coverage probability of `r 100 - num_inside_interval`%
+
+### Wald tests:
+
+```{r wald tests new}
+
+p_vals2 <- rep(NA, 100)
+
+
+for (i in 1:100) {
+	W <- (coefs_matrix2[i,2] - 1) / ses_matrix2[i,2]
+	p_vals2[i] <- 1 - (pnorm(abs(W)) - pnorm(-abs(W)))
+}
+
+```
+
+Test was rejected in `r sum(p_vals2 < 0.05)` cases which more or less
+agrees with the coverages calculated before.
+
+
+## e)
+
+What's happening is that we now have some selection process in the data. In this
+particular case, high values of x were more likely to show up in the dataset.
+
+
+# Question 4
+
+```{r Load Q4 data}
+opioid_data <- read_rds(here("data", "opioids.rds"))
+```
+
+## a) - EDA
+
+First I will generate a ton of plots of variables to visually look for patterns.
+
+```{r death distributions}
+df <- opioid_data
+
+df %>% ggplot() +
+	aes(x = deaths) +
+	geom_histogram(bins = 50) +
+	labs(title = "Histogram of deaths")
+```
+
+I can tell that the distribution is right-skewed and with quite some observations
+out in the high deathcounts. This is without context so next I wanna see if 
+some particular states have large variations (of course they do)
+
+
+```{r plots2}
+df %>% ggplot() +
+	aes(x = abbrev, y = deaths) +
+	geom_violin() +
+	# Stolen from your repo
+	theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = .5)) +
+	labs(title = "Violin plots of deaths by state")
+```
+
+There are a couple of states with huge variations like OH (Ohio?) or FL (Florida)
+and quite a few of the states have very low variations and low numbers. This is
+not as likely due to just population since California would be somewhere in the
+sky. Next I'm gonna make sure that it's true by looking at deaths vs pop and 
+color the states.
+
+
+```{r plots3}
+df %>% ggplot() +
+	aes(x = total_pop, y = deaths, color = abbrev) +
+	geom_point() +
+	labs(title = "Plot of deaths vs population by state")
+```
+
+There seems to be a population pattern to some degree (fair), but overall there
+seems to be quite a lot of variation that's outside of that. Let's look at 
+mortality (deaths / pop) to see if there is something a bit easier to spot.
+
+```{r plots4}
+df %>% ggplot() +
+	aes(x = abbrev, y = deaths/total_pop) +
+	geom_point() +
+	labs(title = "Plot of mortality by state") +
+	theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = .5))
+```
+
+This should show the variation in deaths that are not exactly just due to
+high pop. Clearly there are some states that are way out there (again OH).
+Let's check out the expected deaths vs actual
+
+```{r plots5}
+df %>% ggplot() +
+	aes(x = expected_deaths, y = deaths) +
+	geom_point() +
+	labs(title = "Plot of deaths vs expected deaths")
+```
+
+This seems to make a lot better at predicting the actual deaths. Probably a solid
+variable to use but by the data dictionary provided it's a derivative of the other
+variables provided so probably unwise to use it alongside them and make statements
+about those variables' coefficients. 
+
+Let's check out whiteness
+
+```{r plots6}
+df %>% ggplot() +
+	aes(x = prop_white, y = deaths) +
+	geom_point() +
+	labs(title = "Plot of deaths vs proportion of white inhabitants")
+```
+
+I can see a woman yelling at a worm. This is a typical example of this:
+
+![](figures/xkcd_linear_regression.png)
+
+I don't think it's worth using it as a predictor. I could probably massage this
+a bit and get something for the model but I highly doubt it would have any real
+meaning. Let's check out prescription rates:
+
+```{r plots7}
+df %>% ggplot() +
+	aes(x = prescription_rate, y = deaths) +
+	geom_point() +
+	labs(title = "Plot of deaths vs prescription rate")
+```
+
+Again there seems to be very minimal trend with overall prescription rates. 
+I don't think it's that good of a var. I could try to massage it a bit by getting
+it to be prescription numbers 
+
+Finally let's take a look at the situation in the job market:
+
+```{r plots8}
+df %>% ggplot() +
+	aes(x = unemp, y = deaths) +
+	geom_point() +
+	labs(title = "Plot of deaths vs unemployment")
+```
+
+Again there doesn't seem to be that much of a pattern. I don't know if the
+variable is worthwhile to use.
+
+Let's take a peek at the correlations
+
+```{r plots9}
+cor <- df %>% select_if(is.numeric) %>% cor()
+
+corrplot(cor, method = "color", type = "lower")
+
+```
+
+I think the predictors to include overall are (either expected_deaths or
+total_pop), plus state and prescription rate. 
+
+Let's look at some summaries:
+
+```{r summary tables}
+ 
+summ_by_state <- df %>% 
+	mutate(mortality = deaths/total_pop) %>% 
+	group_by(state) %>%
+	summarize(n = n(),
+			  mean_deaths = mean(deaths),
+			  var_deaths = var(deaths),
+			  median_deaths = median(deaths),
+			  min_deaths = min(deaths),
+			  max_deaths = max(deaths), 
+			  mean_mort = mean(mortality),
+			  var_mort = var(mortality)
+	)
+
+kableExtra::kable(summ_by_state)
+
+```
+
+## b) Poisson Regression
+
+```{r Poiss Reg}
+
+df <- df %>% mutate(state = relevel(as_factor(state),ref = "Illinois" ))
+
+poiss_mod <- glm(deaths~ expected_deaths + state + prescription_rate, family = poisson, data = df, offset = log(total_pop))
+
+summary(poiss_mod)
+```
+
+```{r visualizing poiss reg}
+
+GGally::ggcoef(poiss_mod, exponentiate = TRUE,exclude_intercept = TRUE, vline_intercept = )
+
+```
+
+We can see that the states coefficients are all over the place - even when we notice
+that the expected_deaths and prescription rate vars are included. This means there
+is most likely something else going on in there. 
+
+Interpretations: (note that these are not perfectly valid since the variables
+are related with eachother so size of individual effects is approximate)
+
+* accounting for prescription rate and expected deaths people from the state of
+Texas (random pick) are `r (1-exp(coef(poiss_mod)["stateTexas"])) * 100`% less
+likely to die
+
+* accounting for state and expected deaths an increase of one in prescription 
+rate per 100 inhabitants results in an estimated `r (1-exp(coef(poiss_mod)["prescription_rate"])) * 100`%
+lower death rate
+
+* accounting for state and prescription rate, increase in variables (national opioid mortality and
+state age population) leading to an increase of expected deaths by one leads to
+an estimated `r (1-exp(coef(poiss_mod)["expected_deaths"])) * 100`% decrease
+(so an increase by `r abs((1-exp(coef(poiss_mod)["expected_deaths"])) * 100)`%) 
+in estimated chances of dying.
+
+States with highest mortality:
+
+```{r highest mort states}
+sort(coef(poiss_mod), decreasing = TRUE)[1:10] %>% kableExtra::kable()
+```
+
+
+## c) Population offset
+
+by the hint - population age distribution (as well as other possible confounds)
+are not accounted for - old people in Florida probably die
+a lot more than the youth in Washington. 
+
+## d) Poisson Regression - expected_deaths
+
+```{r poiss reg expected deaths offset}
+
+poiss_mod2 <- glm(deaths~ state + prescription_rate, family = poisson, data = df, offset = log(expected_deaths))
+
+summary(poiss_mod2)
+
+```
+
+Previously the interpretation of $(1 - exp(\text{coefficient}) )* 100\%$ was that
+the variable was associated with that % decrease in mortality compared to the 
+average person in the population assuming that all populations are the same in
+distribution just not in number. 
+(Not 100% since I included the expected deaths variable)
+
+Now this is gonna take into account that the populations have different distributions.
+
+## e) Overdispersion
+
+```{r overdispersion}
+
+res <- df %>%
+	mutate(resids = resid(poiss_mod, type = "pear"))
+
+res_summary <- res %>%
+	summarize(mean = mean(resids),
+			  sd = sd(resids))
+
+res_summary %>% kableExtra::kable()
+
+```
+
+These definitely don't have standard deviation of 1!
+
+Estimated overdispersion factor:
+
+```{r overdisp factor}
+# Doesn't work for some ungodly reason
+# n <- length(df$year)
+# k <- length(coef(poiss_mod2))
+# 
+# overdisp_factor1 <- sum(res$resids^2) / (n - k)
+
+qusipoiss_mod <- glm(deaths~ state + expected_deaths + prescription_rate, family = quasipoisson, data = df, offset = log(expected_deaths))
+
+overdisp_factor <- summary(qusipoiss_mod)$dispersion
+
+```
+
+The overdispersion factor is `r overdisp_factor` which means that the standard
+errors are inflated by `r sqrt(overdisp_factor)` which is quite a bit.
+So yeah, there is an issue.
+
+## f) Neg Bin Regression 
+
+```{r neg bin reg}
+
+neg_bin_mod <- MASS::glm.nb(deaths~ expected_deaths + state + prescription_rate, data = df)
+summary(neg_bin_mod)
+
+```
+
+It does change quite a few of significaces down to not-significant. The states 
+could probably be grouped more into buckets of states either by region or by 
+population distribution. As expected.
+
+LRT:
+
+```{r LRT}
+
+res_dev1 <- poiss_mod$deviance
+res_dev2 <- -neg_bin_mod$twologlik
+
+chisq <- res_dev1 - res_dev2
+
+pchisq(chisq, 1, lower.tail = FALSE)
+
+```
+
+P-value is pretty much zero so NB is much better. This is also very clear from
+looking at raw likelihood numbers - the difference is in the thousands while the
+df difference is exactly 1 (the theta for NB)
+
+## g) Summary
+
+
+

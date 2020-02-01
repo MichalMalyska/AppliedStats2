@@ -13,7 +13,6 @@ library(here)
 library(aod)
 library(corrplot)
 theme_set(theme_minimal())
-
 ```
 
 # Question 1
@@ -218,7 +217,7 @@ $$
 
 # Question 3
 
-I refactored the code a tiny bit cause it looked horrid
+I refactored the code a tiny bit
 
 ```{r setup for Q3}
 set.seed(123)
@@ -226,10 +225,9 @@ set.seed(123)
 X <- matrix(NA, 100, 100)
 Y <- X
 for (i in 1:100) {
-	X[i, ] <- rnorm(100)
-	Y[i, ] <- rpois(100, lambda = exp(0.5 + X[i,] + 0.2 * X[i,] ^ 2))
+  X[i, ] <- rnorm(100)
+  Y[i, ] <- rpois(100, lambda = exp(0.5 + X[i, ] + 0.2 * X[i, ]^2))
 }
-
 ```
 
 ## a) Fitting poisson glm
@@ -242,22 +240,23 @@ ses_matrix <- matrix(NA, 100, 3)
 p_vals_check <- rep(NA, 100)
 
 for (i in 1:100) {
-	data_set <- tibble(x = X[i, ], y = Y[i, ])
-	mod <-
-		glm(formula = y ~ x + I(x ^ 2),
-			data = data_set,
-			family = poisson)
-	coefs_matrix[i, ] <- coefficients(mod)
-	ses_matrix[i, ] <- sqrt(diag(vcov(mod)))
-	p_vals_check[i] <-
-		wald.test(
-			b = coef(mod),
-			Sigma = vcov(mod),
-			Terms = 2,
-			H0 = 1
-		)$result$chi2[3]
+  data_set <- tibble(x = X[i, ], y = Y[i, ])
+  mod <-
+    glm(
+      formula = y ~ x + I(x^2),
+      data = data_set,
+      family = poisson
+    )
+  coefs_matrix[i, ] <- coefficients(mod)
+  ses_matrix[i, ] <- sqrt(diag(vcov(mod)))
+  p_vals_check[i] <-
+    wald.test(
+      b = coef(mod),
+      Sigma = vcov(mod),
+      Terms = 2,
+      H0 = 1
+    )$result$chi2[3]
 }
-
 ```
 
 ## b) coverage probability for 2SE on x 
@@ -281,10 +280,9 @@ Also, doesn't really match the 95% CI thing.
 p_vals <- rep(NA, 100)
 
 for (i in 1:100) {
-	W <- (coefs_matrix[i,2] - 1) / ses_matrix[i,2]
-	p_vals[i] <- 1 - (pnorm(abs(W)) - pnorm(-abs(W)))
+  W <- (coefs_matrix[i, 2] - 1) / ses_matrix[i, 2]
+  p_vals[i] <- 1 - (pnorm(abs(W)) - pnorm(-abs(W)))
 }
-
 ```
 
 Test was rejected in `r sum(p_vals < 0.05)` case(s).
@@ -295,11 +293,11 @@ set.seed(321)
 X2 <- matrix(NA, 100, 100)
 Y2 <- X2
 for (i in 1:100) {
-	weights <- ifelse(X[i,] > 1, 10, 1)
-	probs <- weights / sum(weights)
-	to_keep_2 <- sample(1:length(X[i,]), 25, prob = probs)
-	X2[i, ] <- X[i, to_keep_2]
-	Y2[i, ] <- Y[i, to_keep_2]
+  weights <- ifelse(X[i, ] > 1, 10, 1)
+  probs <- weights / sum(weights)
+  to_keep_2 <- sample(1:length(X[i, ]), 25, prob = probs)
+  X2[i, ] <- X[i, to_keep_2]
+  Y2[i, ] <- Y[i, to_keep_2]
 }
 ```
 
@@ -313,17 +311,18 @@ ses_matrix2 <- matrix(NA, 100, 3)
 
 
 for (i in 1:100) {
-	data_set <- tibble(x = X2[i,], y = Y2[i,])
-	mod <- glm(formula = y ~ x + I(x ^ 2),
-			   data = data_set,
-			   family = poisson)
-	coefs_matrix2[i,] <- coefficients(mod)
-	ses_matrix2[i,] <- sqrt(diag(vcov(mod)))
+  data_set <- tibble(x = X2[i, ], y = Y2[i, ])
+  mod <- glm(
+    formula = y ~ x + I(x^2),
+    data = data_set,
+    family = poisson
+  )
+  coefs_matrix2[i, ] <- coefficients(mod)
+  ses_matrix2[i, ] <- sqrt(diag(vcov(mod)))
 }
 
 num_inside_interval <-
-	sum(coefs_matrix2[, 2] + 2 * ses_matrix2[, 2] < 1) + sum(coefs_matrix2[, 2] - 2 * ses_matrix2[, 2] > 1)
-
+  sum(coefs_matrix2[, 2] + 2 * ses_matrix2[, 2] < 1) + sum(coefs_matrix2[, 2] - 2 * ses_matrix2[, 2] > 1)
 ```
 
 ### Coverage probabilities:
@@ -340,10 +339,9 @@ p_vals2 <- rep(NA, 100)
 
 
 for (i in 1:100) {
-	W <- (coefs_matrix2[i,2] - 1) / ses_matrix2[i,2]
-	p_vals2[i] <- 1 - (pnorm(abs(W)) - pnorm(-abs(W)))
+  W <- (coefs_matrix2[i, 2] - 1) / ses_matrix2[i, 2]
+  p_vals2[i] <- 1 - (pnorm(abs(W)) - pnorm(-abs(W)))
 }
-
 ```
 
 Test was rejected in `r sum(p_vals2 < 0.05)` cases which more or less
@@ -358,7 +356,7 @@ particular case, high values of x were more likely to show up in the dataset.
 
 # Question 4
 
-```{r Load Q4 data}
+```{r Load Q4 data, echo=FALSE}
 opioid_data <- read_rds(here("data", "opioids.rds"))
 ```
 
@@ -366,13 +364,13 @@ opioid_data <- read_rds(here("data", "opioids.rds"))
 
 First I will generate a ton of plots of variables to visually look for patterns.
 
-```{r death distributions}
+```{r death distributions, echo=FALSE}
 df <- opioid_data
 
 df %>% ggplot() +
-	aes(x = deaths) +
-	geom_histogram(bins = 50) +
-	labs(title = "Histogram of deaths")
+  aes(x = deaths) +
+  geom_histogram(bins = 50) +
+  labs(title = "Histogram of deaths")
 ```
 
 I can tell that the distribution is right-skewed and with quite some observations
@@ -380,13 +378,13 @@ out in the high deathcounts. This is without context so next I wanna see if
 some particular states have large variations (of course they do)
 
 
-```{r plots2}
+```{r plots2, echo=FALSE}
 df %>% ggplot() +
-	aes(x = abbrev, y = deaths) +
-	geom_violin() +
-	# Stolen from your repo
-	theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = .5)) +
-	labs(title = "Violin plots of deaths by state")
+  aes(x = abbrev, y = deaths) +
+  geom_violin() +
+  # Stolen from your repo
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = .5)) +
+  labs(title = "Violin plots of deaths by state")
 ```
 
 There are a couple of states with huge variations like OH (Ohio?) or FL (Florida)
@@ -396,34 +394,34 @@ sky. Next I'm gonna make sure that it's true by looking at deaths vs pop and
 color the states.
 
 
-```{r plots3}
+```{r plots3, echo=FALSE}
 df %>% ggplot() +
-	aes(x = total_pop, y = deaths, color = abbrev) +
-	geom_point() +
-	labs(title = "Plot of deaths vs population by state")
+  aes(x = total_pop, y = deaths, color = abbrev) +
+  geom_point() +
+  labs(title = "Plot of deaths vs population by state")
 ```
 
 There seems to be a population pattern to some degree (fair), but overall there
 seems to be quite a lot of variation that's outside of that. Let's look at 
 mortality (deaths / pop) to see if there is something a bit easier to spot.
 
-```{r plots4}
+```{r plots4, echo=FALSE}
 df %>% ggplot() +
-	aes(x = abbrev, y = deaths/total_pop) +
-	geom_point() +
-	labs(title = "Plot of mortality by state") +
-	theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = .5))
+  aes(x = abbrev, y = deaths / total_pop) +
+  geom_point() +
+  labs(title = "Plot of mortality by state") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = .5))
 ```
 
 This should show the variation in deaths that are not exactly just due to
 high pop. Clearly there are some states that are way out there (again OH).
 Let's check out the expected deaths vs actual
 
-```{r plots5}
+```{r plots5, echo=FALSE}
 df %>% ggplot() +
-	aes(x = expected_deaths, y = deaths) +
-	geom_point() +
-	labs(title = "Plot of deaths vs expected deaths")
+  aes(x = expected_deaths, y = deaths) +
+  geom_point() +
+  labs(title = "Plot of deaths vs expected deaths")
 ```
 
 This seems to make a lot better at predicting the actual deaths. Probably a solid
@@ -433,11 +431,11 @@ about those variables' coefficients.
 
 Let's check out whiteness
 
-```{r plots6}
+```{r plots6, echo=FALSE}
 df %>% ggplot() +
-	aes(x = prop_white, y = deaths) +
-	geom_point() +
-	labs(title = "Plot of deaths vs proportion of white inhabitants")
+  aes(x = prop_white, y = deaths) +
+  geom_point() +
+  labs(title = "Plot of deaths vs proportion of white inhabitants")
 ```
 
 I can see a woman yelling at a worm. This is a typical example of this:
@@ -448,11 +446,11 @@ I don't think it's worth using it as a predictor. I could probably massage this
 a bit and get something for the model but I highly doubt it would have any real
 meaning. Let's check out prescription rates:
 
-```{r plots7}
+```{r plots7, echo=FALSE}
 df %>% ggplot() +
-	aes(x = prescription_rate, y = deaths) +
-	geom_point() +
-	labs(title = "Plot of deaths vs prescription rate")
+  aes(x = prescription_rate, y = deaths) +
+  geom_point() +
+  labs(title = "Plot of deaths vs prescription rate")
 ```
 
 Again there seems to be very minimal trend with overall prescription rates. 
@@ -461,11 +459,11 @@ it to be prescription numbers
 
 Finally let's take a look at the situation in the job market:
 
-```{r plots8}
+```{r plots8, echo=FALSE}
 df %>% ggplot() +
-	aes(x = unemp, y = deaths) +
-	geom_point() +
-	labs(title = "Plot of deaths vs unemployment")
+  aes(x = unemp, y = deaths) +
+  geom_point() +
+  labs(title = "Plot of deaths vs unemployment")
 ```
 
 Again there doesn't seem to be that much of a pattern. I don't know if the
@@ -473,11 +471,12 @@ variable is worthwhile to use.
 
 Let's take a peek at the correlations
 
-```{r plots9}
-cor <- df %>% select_if(is.numeric) %>% cor()
+```{r plots9, echo=FALSE}
+cor <- df %>%
+  select_if(is.numeric) %>%
+  cor()
 
 corrplot(cor, method = "color", type = "lower")
-
 ```
 
 I think the predictors to include overall are (either expected_deaths or
@@ -485,40 +484,40 @@ total_pop), plus state and prescription rate.
 
 Let's look at some summaries:
 
-```{r summary tables}
- 
-summ_by_state <- df %>% 
-	mutate(mortality = deaths/total_pop) %>% 
-	group_by(state) %>%
-	summarize(n = n(),
-			  mean_deaths = mean(deaths),
-			  var_deaths = var(deaths),
-			  median_deaths = median(deaths),
-			  min_deaths = min(deaths),
-			  max_deaths = max(deaths), 
-			  mean_mort = mean(mortality),
-			  var_mort = var(mortality)
-	)
+```{r summary tables, echo=FALSE}
+
+summ_by_state <- df %>%
+  mutate(mortality = deaths / total_pop) %>%
+  group_by(state) %>%
+  summarize(
+    n = n(),
+    mean_deaths = mean(deaths),
+    var_deaths = var(deaths),
+    median_deaths = median(deaths),
+    min_deaths = min(deaths),
+    max_deaths = max(deaths),
+    mean_mort = mean(mortality),
+    var_mort = var(mortality)
+  )
 
 kableExtra::kable(summ_by_state)
-
 ```
 
 ## b) Poisson Regression
 
-```{r Poiss Reg}
+```{r Poiss Reg, echo=FALSE}
 
-df <- df %>% mutate(state = relevel(as_factor(state),ref = "Illinois" ))
+df <- df %>% mutate(state = relevel(as_factor(state), ref = "Illinois"))
 
-poiss_mod <- glm(deaths~ expected_deaths + state + prescription_rate, family = poisson, data = df, offset = log(total_pop))
+poiss_mod <- glm(deaths ~ expected_deaths + state + prescription_rate, family = poisson, data = df, offset = log(total_pop))
 
 summary(poiss_mod)
 ```
 
-```{r visualizing poiss reg}
+```{r visualizing poiss reg, echo=FALSE}
 
-GGally::ggcoef(poiss_mod, exponentiate = TRUE,exclude_intercept = TRUE, vline_intercept = )
-
+GGally::ggcoef(poiss_mod, exponentiate = TRUE, exclude_intercept = TRUE) +
+  labs(title = "Poisson regression coefficients (exponentiated)")
 ```
 
 We can see that the states coefficients are all over the place - even when we notice
@@ -530,11 +529,11 @@ are related with eachother so size of individual effects is approximate)
 
 * accounting for prescription rate and expected deaths people from the state of
 Texas (random pick) are `r (1-exp(coef(poiss_mod)["stateTexas"])) * 100`% less
-likely to die
+likely to die than the average person in the US
 
 * accounting for state and expected deaths an increase of one in prescription 
 rate per 100 inhabitants results in an estimated `r (1-exp(coef(poiss_mod)["prescription_rate"])) * 100`%
-lower death rate
+lower death rate than the average person in the US
 
 * accounting for state and prescription rate, increase in variables (national opioid mortality and
 state age population) leading to an increase of expected deaths by one leads to
@@ -544,7 +543,7 @@ in estimated chances of dying.
 
 States with highest mortality:
 
-```{r highest mort states}
+```{r highest mort states, echo=FALSE}
 sort(coef(poiss_mod), decreasing = TRUE)[1:10] %>% kableExtra::kable()
 ```
 
@@ -553,69 +552,62 @@ sort(coef(poiss_mod), decreasing = TRUE)[1:10] %>% kableExtra::kable()
 
 by the hint - population age distribution (as well as other possible confounds)
 are not accounted for - old people in Florida probably die
-a lot more than the youth in Washington. 
+a lot more than the youth in Washington. This should be accounted for by 
+expected deaths variable. 
 
 ## d) Poisson Regression - expected_deaths
 
-```{r poiss reg expected deaths offset}
+```{r poiss reg expected deaths offset, echo=FALSE}
 
-poiss_mod2 <- glm(deaths~ state + prescription_rate, family = poisson, data = df, offset = log(expected_deaths))
+poiss_mod2 <- glm(deaths ~ state + prescription_rate, family = poisson, data = df, offset = log(expected_deaths))
 
 summary(poiss_mod2)
-
 ```
 
 Previously the interpretation of $(1 - exp(\text{coefficient}) )* 100\%$ was that
 the variable was associated with that % decrease in mortality compared to the 
 average person in the population assuming that all populations are the same in
 distribution just not in number. 
-(Not 100% since I included the expected deaths variable)
 
 Now this is gonna take into account that the populations have different distributions.
 
 ## e) Overdispersion
 
-```{r overdispersion}
+```{r overdispersion, echo=FALSE}
 
 res <- df %>%
-	mutate(resids = resid(poiss_mod, type = "pear"))
+  mutate(resids = resid(poiss_mod2, type = "pear"))
 
 res_summary <- res %>%
-	summarize(mean = mean(resids),
-			  sd = sd(resids))
+  summarize(
+    mean = mean(resids),
+    sd = sd(resids)
+  )
 
 res_summary %>% kableExtra::kable()
-
 ```
 
 These definitely don't have standard deviation of 1!
 
 Estimated overdispersion factor:
 
-```{r overdisp factor}
-# Doesn't work for some ungodly reason
-# n <- length(df$year)
-# k <- length(coef(poiss_mod2))
-# 
-# overdisp_factor1 <- sum(res$resids^2) / (n - k)
+```{r overdisp factor, include=FALSE}
+qusipoiss_mod <- glm(deaths ~ state + expected_deaths + prescription_rate, family = quasipoisson, data = df, offset = log(expected_deaths))
 
-qusipoiss_mod <- glm(deaths~ state + expected_deaths + prescription_rate, family = quasipoisson, data = df, offset = log(expected_deaths))
 
 overdisp_factor <- summary(qusipoiss_mod)$dispersion
-
 ```
 
 The overdispersion factor is `r overdisp_factor` which means that the standard
 errors are inflated by `r sqrt(overdisp_factor)` which is quite a bit.
 So yeah, there is an issue.
 
-## f) Neg Bin Regression 
+## f) Negative Binomial Regression 
 
-```{r neg bin reg}
+```{r neg bin reg, echo=FALSE}
 
-neg_bin_mod <- MASS::glm.nb(deaths~ expected_deaths + state + prescription_rate, data = df)
+neg_bin_mod <- MASS::glm.nb(deaths ~ expected_deaths + state + prescription_rate, data = df)
 summary(neg_bin_mod)
-
 ```
 
 It does change quite a few of significaces down to not-significant. The states 
@@ -624,22 +616,28 @@ population distribution. As expected.
 
 LRT:
 
-```{r LRT}
+```{r LRT, include=FALSE}
 
 res_dev1 <- poiss_mod$deviance
 res_dev2 <- -neg_bin_mod$twologlik
 
 chisq <- res_dev1 - res_dev2
 
-pchisq(chisq, 1, lower.tail = FALSE)
-
+p_val <- pchisq(chisq, 1, lower.tail = FALSE)
 ```
 
-P-value is pretty much zero so NB is much better. This is also very clear from
+P-value is `r p_val` (pretty much zero) so NB is much better. This is also very clear from
 looking at raw likelihood numbers - the difference is in the thousands while the
 df difference is exactly 1 (the theta for NB)
 
 ## g) Summary
 
+After iterating through a bunch of models (none of which were a very good fit)
+it's clear that the expected number of deaths is predictive of mortality,
+the mortality is also highly variable per state, due to things other than
+prescription rate and population size and distribution as well as unemployment. 
+Presecription rate seems to have an effect. Overall there definitely is a need for
+both: a more advanced modelling approach and a larger number of variables that
+could help account for the inter-state variation. 
 
 

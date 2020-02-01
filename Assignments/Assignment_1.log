@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2020.1.25)  25 JAN 2020 23:01
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2020.1.25)  31 JAN 2020 21:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -124,15 +124,6 @@ Package: ifxetex 2019/10/25 v0.7 ifxetex legacy package. Use iftex instead.
 Package: iftex 2019/11/07 v1.0c TeX engine tests
 )) (/usr/local/texlive/2016/texmf-dist/tex/generic/iftex/ifluatex.sty
 Package: ifluatex 2019/10/25 v1.5 ifluatex legacy package. Use iftex instead.
-) (/usr/local/texlive/2016/texmf-dist/tex/latex/base/fixltx2e.sty
-Package: fixltx2e 2016/12/29 v2.1a fixes to LaTeX (obsolete)
-Applying: [2015/01/01] Old fixltx2e package on input line 46.
-
-Package fixltx2e Warning: fixltx2e is not required with releases after 2015
-(fixltx2e)                All fixes are now in the LaTeX kernel.
-(fixltx2e)                See the latexrelease package for details.
-
-Already applied: [0000/00/00] Old fixltx2e package on input line 53.
 ) (/usr/local/texlive/2016/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2018/08/11 v2.0j Standard LaTeX package
 (/usr/local/texlive/2016/texmf-dist/tex/latex/base/t1enc.def
@@ -334,7 +325,32 @@ Package: kvsetkeys 2019/12/15 v1.18 Key value parser (HO)
 )) (/usr/local/texlive/2016/texmf-dist/tex/latex/etoolbox/etoolbox.sty
 Package: etoolbox 2019/09/21 v2.5h e-TeX tools for LaTeX (JAW)
 \etb@tempcnta=\count102
-)) (/usr/local/texlive/2016/texmf-dist/tex/latex/hyperref/hyperref.sty
+)) (/usr/local/texlive/2016/texmf-dist/tex/latex/xcolor/xcolor.sty
+Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
+(/usr/local/texlive/2016/texmf-dist/tex/latex/graphics-cfg/color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package xcolor Info: Driver file: pdftex.def on input line 225.
+(/usr/local/texlive/2016/texmf-dist/tex/latex/graphics-def/pdftex.def
+File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
+)
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1352.
+Package xcolor Info: Model `RGB' extended on input line 1364.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1366.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1367.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
+) (/usr/local/texlive/2016/texmf-dist/tex/latex/xurl/xurl.sty
+Package: xurl 2020/01/24 v 0.09 modify URL breaks
+(/usr/local/texlive/2016/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip11
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)) (/usr/local/texlive/2016/texmf-dist/tex/latex/bookmark/bookmark.sty
+Package: bookmark 2019/12/03 v1.28 PDF bookmarks (HO)
+(/usr/local/texlive/2016/texmf-dist/tex/latex/hyperref/hyperref.sty
 Package: hyperref 2020/01/14 v7.00d Hypertext links for LaTeX
 (/usr/local/texlive/2016/texmf-dist/tex/latex/pdftexcmds/pdftexcmds.sty
 Package: pdftexcmds 2019/11/24 v0.31 Utility functions of pdfTeX for LuaTeX (HO
@@ -388,10 +404,6 @@ Package hyperref Info: Backreferencing OFF on input line 4567.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4800.
 \c@Hy@tempcnt=\count107
-(/usr/local/texlive/2016/texmf-dist/tex/latex/url/url.sty
-\Urlmuskip=\muskip11
-Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
-)
 LaTeX Info: Redefining \url on input line 5159.
 \XeTeXLinkMargin=\dimen114
 (/usr/local/texlive/2016/texmf-dist/tex/generic/bitset/bitset.sty
@@ -438,16 +450,17 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 86.
 )
 \Hy@SectionHShift=\skip47
-)
-Package hyperref Info: Option `breaklinks' set `true' on input line 35.
-(/usr/local/texlive/2016/texmf-dist/tex/latex/geometry/geometry.sty
+) (/usr/local/texlive/2016/texmf-dist/tex/latex/bookmark/bkm-pdftex.def
+File: bkm-pdftex.def 2019/12/03 v1.28 bookmark driver for pdfTeX (HO)
+\BKM@id=\count114
+)) (/usr/local/texlive/2016/texmf-dist/tex/latex/geometry/geometry.sty
 Package: geometry 2020/01/02 v5.9 Page Geometry
 (/usr/local/texlive/2016/texmf-dist/tex/generic/iftex/ifvtex.sty
 Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 )
-\Gm@cnth=\count114
-\Gm@cntv=\count115
-\c@Gm@tempcnt=\count116
+\Gm@cnth=\count115
+\Gm@cntv=\count116
+\c@Gm@tempcnt=\count117
 \Gm@bindingoffset=\dimen117
 \Gm@wd@mp=\dimen118
 \Gm@odd@mp=\dimen119
@@ -457,21 +470,13 @@ Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 \Gm@layouthoffset=\dimen123
 \Gm@layoutvoffset=\dimen124
 \Gm@dimlist=\toks24
-) (/usr/local/texlive/2016/texmf-dist/tex/latex/graphics/color.sty
-Package: color 2016/07/10 v1.1e Standard LaTeX Color (DPC)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/graphics-cfg/color.cfg
-File: color.cfg 2016/01/02 v1.6 sample color configuration
-)
-Package color Info: Driver file: pdftex.def on input line 147.
-(/usr/local/texlive/2016/texmf-dist/tex/latex/graphics-def/pdftex.def
-File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
-)) (/usr/local/texlive/2016/texmf-dist/tex/latex/fancyvrb/fancyvrb.sty
+) (/usr/local/texlive/2016/texmf-dist/tex/latex/fancyvrb/fancyvrb.sty
 Package: fancyvrb 2020/01/13 v3.5 verbatim text (tvz,hv)
-\FV@CodeLineNo=\count117
+\FV@CodeLineNo=\count118
 \FV@InFile=\read1
 \FV@TabBox=\box29
-\c@FancyVerbLine=\count118
-\FV@StepNumber=\count119
+\c@FancyVerbLine=\count119
+\FV@StepNumber=\count120
 \FV@OutFile=\write3
 ) (/usr/local/texlive/2016/texmf-dist/tex/latex/framed/framed.sty
 Package: framed 2011/10/22 v 0.96: framed or shaded text with page breaks
@@ -493,11 +498,6 @@ Package graphics Info: Driver file: pdftex.def on input line 105.
 )
 \Gin@req@height=\dimen129
 \Gin@req@width=\dimen130
-) (/usr/local/texlive/2016/texmf-dist/tex/latex/grffile/grffile.sty
-Package: grffile 2019/11/11 v2.1 Extended file name support for graphics (legac
-y)
-Package grffile Info: This package is an empty stub for compatibility on input 
-line 40.
 ) (/usr/local/texlive/2016/texmf-dist/tex/latex/booktabs/booktabs.sty
 Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
 \heavyrulewidth=\dimen131
@@ -510,12 +510,12 @@ Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
 \cmidrulesep=\dimen138
 \cmidrulekern=\dimen139
 \defaultaddspace=\dimen140
-\@cmidla=\count120
-\@cmidlb=\count121
+\@cmidla=\count121
+\@cmidlb=\count122
 \@aboverulesep=\dimen141
 \@belowrulesep=\dimen142
-\@thisruleclass=\count122
-\@lastruleclass=\count123
+\@thisruleclass=\count123
+\@lastruleclass=\count124
 \@thisrulewidth=\dimen143
 ) (/usr/local/texlive/2016/texmf-dist/tex/latex/tools/longtable.sty
 Package: longtable 2019/02/06 v4.12 Multi-page Table package (DPC)
@@ -523,16 +523,16 @@ Package: longtable 2019/02/06 v4.12 Multi-page Table package (DPC)
 \LTright=\skip50
 \LTpre=\skip51
 \LTpost=\skip52
-\LTchunksize=\count124
+\LTchunksize=\count125
 \LTcapwidth=\dimen144
 \LT@head=\box30
 \LT@firsthead=\box31
 \LT@foot=\box32
 \LT@lastfoot=\box33
-\LT@cols=\count125
-\LT@rows=\count126
-\c@LT@tables=\count127
-\c@LT@chunks=\count128
+\LT@cols=\count126
+\LT@rows=\count127
+\c@LT@tables=\count128
+\c@LT@chunks=\count129
 \LT@p@ftn=\toks25
 ) (/usr/local/texlive/2016/texmf-dist/tex/latex/tools/array.sty
 Package: array 2019/08/31 v2.4l Tabular extension package (FMi)
@@ -546,19 +546,19 @@ Package: array 2019/08/31 v2.4l Tabular extension package (FMi)
 ) (/usr/local/texlive/2016/texmf-dist/tex/latex/multirow/multirow.sty
 Package: multirow 2019/05/31 v2.5 Span multiple rows of a table
 \multirow@colwidth=\skip55
-\multirow@cntb=\count129
+\multirow@cntb=\count130
 \multirow@dima=\skip56
 \bigstrutjot=\dimen147
 ) (/usr/local/texlive/2016/texmf-dist/tex/latex/wrapfig/wrapfig.sty
 \wrapoverhang=\dimen148
 \WF@size=\dimen149
-\c@WF@wrappedlines=\count130
+\c@WF@wrappedlines=\count131
 \WF@box=\box36
 \WF@everypar=\toks27
 Package: wrapfig 2003/01/31  v 3.6
 ) (/usr/local/texlive/2016/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count131
+\c@float@type=\count132
 \float@exts=\toks28
 \float@box=\box37
 \@float@everytoks=\toks29
@@ -578,16 +578,16 @@ Package: tabu 2019/01/11 v2.9 - flexible LaTeX tabulars (FC+tabu-fixed)
 (/usr/local/texlive/2016/texmf-dist/tex/latex/varwidth/varwidth.sty
 Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
 \@vwid@box=\box39
-\sift@deathcycles=\count132
+\sift@deathcycles=\count133
 \@vwid@loff=\dimen150
 \@vwid@roff=\dimen151
 )
-\c@taburow=\count133
-\tabu@nbcols=\count134
-\tabu@cnt=\count135
-\tabu@Xcol=\count136
-\tabu@alloc=\count137
-\tabu@nested=\count138
+\c@taburow=\count134
+\tabu@nbcols=\count135
+\tabu@cnt=\count136
+\tabu@Xcol=\count137
+\tabu@alloc=\count138
+\tabu@nested=\count139
 \tabu@target=\dimen152
 \tabu@spreadtarget=\dimen153
 \tabu@naturalX=\dimen154
@@ -624,7 +624,7 @@ Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
 \UL@skip=\skip60
 \UL@hook=\toks33
 \UL@height=\dimen161
-\UL@pe=\count139
+\UL@pe=\count140
 \UL@pixel=\dimen162
 \ULC@box=\box47
 Package: ulem 2019/11/18
@@ -632,72 +632,76 @@ Package: ulem 2019/11/18
 ) (/usr/local/texlive/2016/texmf-dist/tex/latex/makecell/makecell.sty
 Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
 \rotheadsize=\dimen164
-\c@nlinenum=\count140
+\c@nlinenum=\count141
 \TeXr@lab=\toks34
-) (/usr/local/texlive/2016/texmf-dist/tex/latex/xcolor/xcolor.sty
-Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/graphics-cfg/color.cfg
-File: color.cfg 2016/01/02 v1.6 sample color configuration
-)
-Package xcolor Info: Driver file: pdftex.def on input line 225.
-LaTeX Info: Redefining \color on input line 709.
-Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
-Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1352.
-Package xcolor Info: Model `RGB' extended on input line 1364.
-Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1366.
-Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1367.
-Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
-Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
-Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
-Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
 ) (./Assignment_1.aux)
 \openout1 = `Assignment_1.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 125.
-LaTeX Font Info:    ... okay on input line 125.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 125.
-LaTeX Font Info:    ... okay on input line 125.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 125.
-LaTeX Font Info:    ... okay on input line 125.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 125.
-LaTeX Font Info:    ... okay on input line 125.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 125.
-LaTeX Font Info:    ... okay on input line 125.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 125.
-LaTeX Font Info:    ... okay on input line 125.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 125.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 121.
+LaTeX Font Info:    ... okay on input line 121.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 121.
+LaTeX Font Info:    ... okay on input line 121.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 121.
+LaTeX Font Info:    ... okay on input line 121.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 121.
+LaTeX Font Info:    ... okay on input line 121.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 121.
+LaTeX Font Info:    ... okay on input line 121.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 121.
+LaTeX Font Info:    ... okay on input line 121.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 121.
 LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 1
-25.
+21.
 (/usr/local/texlive/2016/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 125.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 125.
-LaTeX Font Info:    ... okay on input line 125.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 125.
-LaTeX Font Info:    ... okay on input line 125.
+LaTeX Font Info:    ... okay on input line 121.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 121.
+LaTeX Font Info:    ... okay on input line 121.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 121.
+LaTeX Font Info:    ... okay on input line 121.
 LaTeX Font Info:    Trying to load font information for T1+lmr on input line 12
-5.
+1.
 (/usr/local/texlive/2016/texmf-dist/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Info: Redefining \microtypecontext on input line 125.
+LaTeX Info: Redefining \microtypecontext on input line 121.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using protrusion set `basicmath'.
 Package microtype Info: Automatic font expansion enabled (level 2),
 (microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
 Package microtype Info: Using default expansion set `basictext'.
-LaTeX Info: Redefining \showhyphens on input line 125.
+LaTeX Info: Redefining \showhyphens on input line 121.
 Package microtype Info: No adjustment of tracking.
 Package microtype Info: No adjustment of interword spacing.
 Package microtype Info: No adjustment of character kerning.
 (/usr/local/texlive/2016/texmf-dist/tex/latex/microtype/mt-cmr.cfg
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
 (RS)
-)
-\AtBeginShipoutBox=\box48
-Package hyperref Info: Link coloring OFF on input line 125.
+) (/usr/local/texlive/2016/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count142
+\scratchdimen=\dimen165
+\scratchbox=\box48
+\nofMPsegments=\count143
+\nofMParguments=\count144
+\everyMPshowfont=\toks35
+\MPscratchCnt=\count145
+\MPscratchDim=\dimen166
+\MPnumerator=\count146
+\makeMPintoPDFobject=\count147
+\everyMPtoPDFconversion=\toks36
+) (/usr/local/texlive/2016/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+Package: epstopdf-base 2019-12-09 v2.10 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+(/usr/local/texlive/2016/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+\AtBeginShipoutBox=\box49
+Package hyperref Info: Link coloring OFF on input line 121.
 (/usr/local/texlive/2016/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
 (/usr/local/texlive/2016/texmf-dist/tex/latex/refcount/refcount.sty
@@ -707,15 +711,11 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 ty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count141
+\c@section@level=\count148
 )
-LaTeX Info: Redefining \ref on input line 125.
-LaTeX Info: Redefining \pageref on input line 125.
-LaTeX Info: Redefining \nameref on input line 125.
-(./Assignment_1.out) (./Assignment_1.out)
-\@outlinefile=\write4
-\openout4 = `Assignment_1.out'.
-
+LaTeX Info: Redefining \ref on input line 121.
+LaTeX Info: Redefining \pageref on input line 121.
+LaTeX Info: Redefining \nameref on input line 121.
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -750,325 +750,84 @@ LaTeX Info: Redefining \nameref on input line 125.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-(/usr/local/texlive/2016/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
-[Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count142
-\scratchdimen=\dimen165
-\scratchbox=\box49
-\nofMPsegments=\count143
-\nofMParguments=\count144
-\everyMPshowfont=\toks35
-\MPscratchCnt=\count145
-\MPscratchDim=\dimen166
-\MPnumerator=\count146
-\makeMPintoPDFobject=\count147
-\everyMPtoPDFconversion=\toks36
-) (/usr/local/texlive/2016/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
-Package: epstopdf-base 2019-12-09 v2.10 Base part for package epstopdf
-Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
-85.
-(/usr/local/texlive/2016/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
-File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
-e
-))
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 1
-27.
+23.
 (/usr/local/texlive/2016/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OML+lmm on input line 1
-27.
+23.
 (/usr/local/texlive/2016/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-127.
+123.
 (/usr/local/texlive/2016/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-127.
+123.
 (/usr/local/texlive/2016/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 127.
+(Font)              <12> on input line 123.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 127.
+(Font)              <8> on input line 123.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 127.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 127
+(Font)              <6> on input line 123.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 123
 .
 (/usr/local/texlive/2016/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 ) (/usr/local/texlive/2016/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 127
+LaTeX Font Info:    Trying to load font information for U+msb on input line 123
 .
 (/usr/local/texlive/2016/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) (/usr/local/texlive/2016/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
-
-Package xcolor Warning: Incompatible color definition on input line 128.
-
 LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 1
-29.
+25.
 (/usr/local/texlive/2016/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 130.
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 126.
 
-Package xcolor Warning: Incompatible color definition on input line 134.
-
-
-Package xcolor Warning: Incompatible color definition on input line 134.
-
-
-Overfull \hbox (128.74324pt too wide) in paragraph at lines 138--138
-[]\T1/lmtt/m/n/10 ## -- Attaching packages ------------------------------------
----------------------------------- tidyverse 1.3.0 --[] 
- []
-
-
-Overfull \hbox (128.74324pt too wide) in paragraph at lines 151--151
-[]\T1/lmtt/m/n/10 ## -- Conflicts ---------------------------------------------
----------------------------- tidyverse_conflicts() --[] 
- []
-
-
-Package xcolor Warning: Incompatible color definition on input line 153.
-
-
-Package xcolor Warning: Incompatible color definition on input line 157.
-
-
-Package xcolor Warning: Incompatible color definition on input line 157.
-
-
-Overfull \hbox (170.74312pt too wide) in paragraph at lines 161--161
+Overfull \hbox (170.74312pt too wide) in paragraph at lines 157--157
 []\T1/lmtt/m/n/10 ## here() starts at /Users/michalmalyska/Desktop/University/G
 rad School/Classes/STA2201 - Applied Statistics/AppliedStats2[] 
  []
 
-
-Package xcolor Warning: Incompatible color definition on input line 163.
-
-
-Package xcolor Warning: Incompatible color definition on input line 168.
-
-
-Package xcolor Warning: Incompatible color definition on input line 168.
-
-
-Package xcolor Warning: Incompatible color definition on input line 174.
-
-
-Package xcolor Warning: Incompatible color definition on input line 178.
-
-
-Package xcolor Warning: Incompatible color definition on input line 178.
-
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 183.
+(Font)              <10> on input line 179.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 183.
+(Font)              <7> on input line 179.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 183.
+(Font)              <5> on input line 179.
 [1
 
 {/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3]
-[4]
 
-Package xcolor Warning: Incompatible color definition on input line 402.
+! Package amsmath Error: \begin{aligned} allowed only in math mode.
 
-
-Package xcolor Warning: Incompatible color definition on input line 413.
-
-
-Package xcolor Warning: Incompatible color definition on input line 413.
-
-
-Package xcolor Warning: Incompatible color definition on input line 418.
-
-
-Package xcolor Warning: Incompatible color definition on input line 441.
-
-
-Package xcolor Warning: Incompatible color definition on input line 441.
-
-[5]
-
-Package xcolor Warning: Incompatible color definition on input line 463.
-
-
-Package xcolor Warning: Incompatible color definition on input line 472.
-
-
-Package xcolor Warning: Incompatible color definition on input line 472.
-
-
-Package xcolor Warning: Incompatible color definition on input line 476.
-
-
-Package xcolor Warning: Incompatible color definition on input line 490.
-
-
-Package xcolor Warning: Incompatible color definition on input line 490.
-
-
-Package xcolor Warning: Incompatible color definition on input line 498.
-
-
-Package xcolor Warning: Incompatible color definition on input line 516.
-
-
-Package xcolor Warning: Incompatible color definition on input line 516.
-
-[6]
-
-Package xcolor Warning: Incompatible color definition on input line 527.
-
-
-Package xcolor Warning: Incompatible color definition on input line 537.
-
-
-Package xcolor Warning: Incompatible color definition on input line 537.
-
-
-Package xcolor Warning: Incompatible color definition on input line 552.
-
-
-Package xcolor Warning: Incompatible color definition on input line 556.
-
-
-Package xcolor Warning: Incompatible color definition on input line 556.
-
-
-Package xcolor Warning: Incompatible color definition on input line 564.
-
-
-Package xcolor Warning: Incompatible color definition on input line 573.
-
-
-Package xcolor Warning: Incompatible color definition on input line 573.
-
-<Assignment_1_files/figure-latex/death distributions-1.pdf, id=177, 459.7175pt 
-x 313.17pt>
-File: Assignment_1_files/figure-latex/death distributions-1.pdf Graphic file (t
-ype pdf)
-<use Assignment_1_files/figure-latex/death distributions-1.pdf>
-Package pdftex.def Info: Assignment_1_files/figure-latex/death distributions-1.
-pdf  used on input line 575.
-(pdftex.def)             Requested size: 459.7304pt x 313.17877pt.
-[7]
-
-Package xcolor Warning: Incompatible color definition on input line 582.
-
-
-Package xcolor Warning: Incompatible color definition on input line 591.
-
-
-Package xcolor Warning: Incompatible color definition on input line 591.
-
-<Assignment_1_files/figure-latex/plots2-1.pdf, id=187, 459.7175pt x 313.17pt>
-File: Assignment_1_files/figure-latex/plots2-1.pdf Graphic file (type pdf)
-<use Assignment_1_files/figure-latex/plots2-1.pdf>
-Package pdftex.def Info: Assignment_1_files/figure-latex/plots2-1.pdf  used on 
-input line 593.
-(pdftex.def)             Requested size: 459.7304pt x 313.17877pt.
-[8 <./Assignment_1_files/figure-latex/death distributions-1.pdf>]
-
-Package xcolor Warning: Incompatible color definition on input line 601.
-
-
-Package xcolor Warning: Incompatible color definition on input line 608.
-
-
-Package xcolor Warning: Incompatible color definition on input line 608.
-
-<Assignment_1_files/figure-latex/plots3-1.pdf, id=200, 454.69875pt x 317.185pt>
-
-File: Assignment_1_files/figure-latex/plots3-1.pdf Graphic file (type pdf)
-<use Assignment_1_files/figure-latex/plots3-1.pdf>
-Package pdftex.def Info: Assignment_1_files/figure-latex/plots3-1.pdf  used on 
-input line 610.
-(pdftex.def)             Requested size: 454.70456pt x 317.18904pt.
-[9 <./Assignment_1_files/figure-latex/plots2-1.pdf>]
-
-Package xcolor Warning: Incompatible color definition on input line 617.
-
-
-Package xcolor Warning: Incompatible color definition on input line 625.
-
-
-Package xcolor Warning: Incompatible color definition on input line 625.
-
-<Assignment_1_files/figure-latex/plots4-1.pdf, id=212, 459.7175pt x 313.17pt>
-File: Assignment_1_files/figure-latex/plots4-1.pdf Graphic file (type pdf)
-<use Assignment_1_files/figure-latex/plots4-1.pdf>
-Package pdftex.def Info: Assignment_1_files/figure-latex/plots4-1.pdf  used on 
-input line 627.
-(pdftex.def)             Requested size: 459.7304pt x 313.17877pt.
-[10 <./Assignment_1_files/figure-latex/plots3-1.pdf>]
-
-Package xcolor Warning: Incompatible color definition on input line 633.
-
-
-Package xcolor Warning: Incompatible color definition on input line 640.
-
-
-Package xcolor Warning: Incompatible color definition on input line 640.
-
-<Assignment_1_files/figure-latex/plots5-1.pdf, id=224, 459.7175pt x 315.1775pt>
-
-File: Assignment_1_files/figure-latex/plots5-1.pdf Graphic file (type pdf)
-<use Assignment_1_files/figure-latex/plots5-1.pdf>
-Package pdftex.def Info: Assignment_1_files/figure-latex/plots5-1.pdf  used on 
-input line 642.
-(pdftex.def)             Requested size: 459.74442pt x 315.19595pt.
-[11 <./Assignment_1_files/figure-latex/plots4-1.pdf>]
-
-Package xcolor Warning: Incompatible color definition on input line 652.
-
-
-Package xcolor Warning: Incompatible color definition on input line 659.
-
-
-Package xcolor Warning: Incompatible color definition on input line 659.
-
-<Assignment_1_files/figure-latex/plots6-1.pdf, id=236, 463.7325pt x 315.1775pt>
-
-File: Assignment_1_files/figure-latex/plots6-1.pdf Graphic file (type pdf)
-<use Assignment_1_files/figure-latex/plots6-1.pdf>
-Package pdftex.def Info: Assignment_1_files/figure-latex/plots6-1.pdf  used on 
-input line 661.
-(pdftex.def)             Requested size: 463.73842pt x 315.18153pt.
-[12 <./Assignment_1_files/figure-latex/plots5-1.pdf>]
-
-LaTeX Warning: File `https://explainxkcd.com/wiki/images/9/91/linear_regression
-.png' not found on input line 665.
-
-
-! Package pdftex.def Error: File `https://explainxkcd.com/wiki/images/9/91/line
-ar_regression.png' not found: using draft setting.
-
-See the pdftex.def package documentation for explanation.
+See the amsmath package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.665 ...m/wiki/images/9/91/linear_regression.png}
-                                                   
+l.356 p
+       (y) &= \int p(y|\theta) p(\theta) d\theta\\ 
 Here is how much of TeX's memory you used:
- 15209 strings out of 492162
- 222051 string characters out of 6125292
- 344995 words of memory out of 5000000
- 19150 multiletter control sequences out of 15000+600000
- 58071 words of font info for 75 fonts, out of 8000000 for 9000
+ 15299 strings out of 492162
+ 221619 string characters out of 6125292
+ 348448 words of memory out of 5000000
+ 19324 multiletter control sequences out of 15000+600000
+ 51281 words of font info for 66 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 40i,11n,42p,820b,341s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 47i,11n,42p,811b,341s stack positions out of 5000i,500n,10000p,200000b,80000s
 
 !  ==> Fatal error occurred, no output PDF file produced!

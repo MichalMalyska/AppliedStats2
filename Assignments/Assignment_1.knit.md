@@ -1,266 +1,135 @@
-% Options for packages loaded elsewhere
-\PassOptionsToPackage{unicode}{hyperref}
-\PassOptionsToPackage{hyphens}{url}
-%
-\documentclass[
-]{article}
-\usepackage{lmodern}
-\usepackage{amssymb,amsmath}
-\usepackage{ifxetex,ifluatex}
-\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
-  \usepackage[T1]{fontenc}
-  \usepackage[utf8]{inputenc}
-  \usepackage{textcomp} % provide euro and other symbols
-\else % if luatex or xetex
-  \usepackage{unicode-math}
-  \defaultfontfeatures{Scale=MatchLowercase}
-  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
-\fi
-% Use upquote if available, for straight quotes in verbatim environments
-\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
-\IfFileExists{microtype.sty}{% use microtype if available
-  \usepackage[]{microtype}
-  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
-}{}
-\makeatletter
-\@ifundefined{KOMAClassName}{% if non-KOMA class
-  \IfFileExists{parskip.sty}{%
-    \usepackage{parskip}
-  }{% else
-    \setlength{\parindent}{0pt}
-    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
-}{% if KOMA class
-  \KOMAoptions{parskip=half}}
-\makeatother
-\usepackage{xcolor}
-\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
-\hypersetup{
-  pdftitle={Assignment 1},
-  pdfauthor={Michal Malyska},
-  hidelinks,
-  pdfcreator={LaTeX via pandoc}}
-\urlstyle{same} % disable monospaced font for URLs
-\usepackage[margin=1in]{geometry}
-\usepackage{color}
-\usepackage{fancyvrb}
-\newcommand{\VerbBar}{|}
-\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
-\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
-% Add ',fontsize=\small' for more characters per line
-\usepackage{framed}
-\definecolor{shadecolor}{RGB}{248,248,248}
-\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
-\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
-\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
-\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\BuiltInTok}[1]{#1}
-\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
-\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
-\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
-\newcommand{\ExtensionTok}[1]{#1}
-\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\ImportTok}[1]{#1}
-\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\NormalTok}[1]{#1}
-\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
-\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
-\newcommand{\RegionMarkerTok}[1]{#1}
-\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\usepackage{graphicx}
-\makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
-% Set default figure placement to htbp
-\makeatletter
-\def\fps@figure{htbp}
-\makeatother
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
-\usepackage{booktabs}
-\usepackage{longtable}
-\usepackage{array}
-\usepackage{multirow}
-\usepackage{wrapfig}
-\usepackage{float}
-\usepackage{colortbl}
-\usepackage{pdflscape}
-\usepackage{tabu}
-\usepackage{threeparttable}
-\usepackage{threeparttablex}
-\usepackage[normalem]{ulem}
-\usepackage{makecell}
-\usepackage{xcolor}
+---
+title: "Assignment 1"
+author: "Michal Malyska"
+date: "23/01/2020"
+output: pdf_document
+---
 
-\title{Assignment 1}
-\author{Michal Malyska}
-\date{23/01/2020}
 
-\begin{document}
-\maketitle
+```r
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{knitr}\OperatorTok{::}\NormalTok{opts\_chunk}\OperatorTok{$}\KeywordTok{set}\NormalTok{(}\DataTypeTok{echo =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{message =} \OtherTok{FALSE}\NormalTok{, }\DataTypeTok{warning =} \OtherTok{FALSE}\NormalTok{)}
+library(tidyverse)
+```
 
-\KeywordTok{library}\NormalTok{(tidyverse)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
+```
 ## -- Attaching packages --------------------------------------- tidyverse 1.3.0 --
-\end{verbatim}
+```
 
-\begin{verbatim}
+```
 ## v ggplot2 3.2.1     v purrr   0.3.3
 ## v tibble  2.1.3     v dplyr   0.8.3
 ## v tidyr   1.0.0     v stringr 1.4.0
 ## v readr   1.3.1     v forcats 0.4.0
-\end{verbatim}
+```
 
-\begin{verbatim}
+```
 ## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()
-\end{verbatim}
+```
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(here)}
-\end{Highlighting}
-\end{Shaded}
+```r
+library(here)
+```
 
-\begin{verbatim}
+```
 ## here() starts at /Users/michalmalyska/Desktop/University/Grad School/Classes/STA2201 - Applied Statistics/AppliedStats2
-\end{verbatim}
+```
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(aod)}
-\KeywordTok{library}\NormalTok{(corrplot)}
-\end{Highlighting}
-\end{Shaded}
+```r
+library(aod)
+library(corrplot)
+```
 
-\begin{verbatim}
+```
 ## corrplot 0.84 loaded
-\end{verbatim}
+```
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{theme\_set}\NormalTok{(}\KeywordTok{theme\_minimal}\NormalTok{())}
-\end{Highlighting}
-\end{Shaded}
+```r
+theme_set(theme_minimal())
+```
 
-\hypertarget{question-1}{%
-\section{Question 1}\label{question-1}}
+# Question 1
 
-\[
+$$
 p(y | \theta, \phi) = exp \left( \frac{y \theta - b(\theta)}{\phi} - c(y, \theta) \right)
-\]
+$$
 
-\hypertarget{a}{%
-\subsection{a)}\label{a}}
+## a)
 
-Show \[\int \frac{dp}{d\theta} dy = 0\] and
-\[\int \frac{d^2p}{d\theta^2} dy = 0\]
+Show $$\int \frac{dp}{d\theta} dy = 0$$ and $$\int \frac{d^2p}{d\theta^2} dy = 0$$
 
-\hypertarget{i}{%
-\subsubsection{i)}\label{i}}
-
+### i)
 Showing:
 
-\[
+$$
 \int \frac{dp}{d\theta} dy = 0
-\]
+$$
 
-\[
+
+$$
 \begin{aligned}
 \int \frac{dp}{d\theta} dy &= \\
 &= \frac{d}{d\theta} \int p dy \\
 &= \frac{d}{d\theta} \int exp \left( \frac{y \theta - b(\theta)}{\phi} - c(y, \phi) \right) dy \\
 &= \frac{d}{d\theta}(1) = 0
 \end{aligned}
-\]
+$$
 
-\hypertarget{ii}{%
-\subsubsection{ii)}\label{ii}}
+### ii) 
 
 Showing:
 
-\[
+$$
 \int \frac{d^2p}{d\theta^2} dy = 0
-\]
+$$
 
-\[
+$$
 \begin{aligned}
 \int \frac{dp}{d\theta} dy &=  \frac{d^2}{d\theta^2} \int p dy \\
 &= \frac{d^2}{d\theta^2} \int exp \left( \frac{y \theta - b(\theta)}{\phi} - c(y, \phi) \right) dy \\
 &= \frac{d^2}{d\theta^2}(1) = 0
 \end{aligned}
-\]
+$$
 
-\hypertarget{b}{%
-\subsection{b}\label{b}}
+## b
 
-\hypertarget{i-1}{%
-\subsubsection{i)}\label{i-1}}
+### i)
 
-Showing \(\mathbb{E}[Y] = b'(\theta)\)
+Showing $\mathbb{E}[Y] = b'(\theta)$
 
-\[
+$$
 \begin{aligned}
 \frac{dp}{d\theta} &= \frac{d}{d\theta} \left( exp \left( \frac{y \theta - b(\theta)}{\phi} - c(y, \phi) \right) \right) \\
 &= exp \left( \frac{y \theta - b(\theta)}{\phi} - c(y, \phi) \right) * \frac{d}{d\theta} \left( \frac{y \theta - b(\theta)}{\phi} - c(y, \theta) \right) \\
 &= p * \left( \frac{y}{\phi} - \frac{b'(\theta)}{\phi} \right) \\
 \end{aligned}
-\]
+$$
 
-\[
+$$
 \begin{aligned}
 0 &= \int \frac{dp}{d\theta} dy \\
 &= \int p * \left( \frac{y}{\phi} - \frac{b'(\theta)}{\phi} \right) dy \\
 &= \frac{1}{\phi} (\mathbb{E}[Y] - b'(\theta)) \\
 &\implies \mathbb{E}[Y] = b'(\theta)
 \end{aligned}
-\]
+$$
 
-\hypertarget{ii-1}{%
-\subsubsection{ii)}\label{ii-1}}
+### ii) 
 
-Showing \(\mathbb{V}ar(Y) = \phi b''(\theta)\)
+Showing $\mathbb{V}ar(Y) = \phi b''(\theta)$
 
-\[
+$$
 \begin{aligned}
 \frac{d^2p}{d\theta^2} &= \frac{d^2}{d\theta^2} \left( exp \left( \frac{y \theta - b(\theta)}{\phi} - c(y, \phi) \right) \right) \\
 &= \frac{d}{d\theta}\left( exp \left( \frac{y \theta - b(\theta)}{\phi} - c(y, \phi) \right) * \frac{d}{d\theta} \left( \frac{y \theta - b(\theta)}{\phi} - c(y, \theta) \right) \right) \\
 &= \frac{d}{d\theta}\left(p * \left( \frac{y}{\phi} - \frac{b'(\theta)}{\phi} \right) \right) \\
 &= \frac{dp}{d\theta} \left( \frac{y}{\phi} - \frac{b'(\theta)}{\phi} \right) - p * \left(  \frac{b''(\theta)}{\phi} \right)
 \end{aligned}
-\]
+$$
 
-\[
+$$
 \begin{aligned}
 0 &= \int \frac{d^2p}{d\theta^2} dy \\
 &= \int \frac{dp}{d\theta} \left( \frac{y}{\phi} - \frac{b'(\theta)}{\phi} \right) - p * \left(  \frac{b''(\theta)}{\phi} \right) dy \\
@@ -269,33 +138,29 @@ Showing \(\mathbb{V}ar(Y) = \phi b''(\theta)\)
 &= \frac{1}{\phi^2} \left( \mathbb{V}ar[Y] + 0  - \phi b''(\theta) \right) \\
 &\implies \mathbb{V}ar[Y] = \phi b''(\theta)
 \end{aligned}
-\]
+$$
 
-\hypertarget{c}{%
-\subsection{c}\label{c}}
+## c 
 
-\hypertarget{i-2}{%
-\subsubsection{i)}\label{i-2}}
+### i)
 
-Showing that \(\mathbb{E}[\frac{dl}{d\theta}] = 0\)
+Showing that $\mathbb{E}[\frac{dl}{d\theta}] = 0$
 
-I will denote \(l = l(\theta)\) for simplicity
+I will denote $l = l(\theta)$ for simplicity
 
-\[
+$$
 \begin{aligned}
 \mathbb{E}[\frac{dl}{d\theta}] &= \mathbb{E}\left[ \frac{d}{d\theta} \left( \frac{y \theta - b(\theta)}{\phi} - c(y, \phi) \right)\right] \\
 &= \mathbb{E}\left[ \frac{y - b'(\theta)}{\phi} \right] \\
 &= \frac{1}{\phi} (\mathbb{E}\left[ y \right]- b'(\theta) ) = 0
 \end{aligned}
-\]
+$$
 
-\hypertarget{ii-2}{%
-\subsubsection{ii)}\label{ii-2}}
+### ii) 
 
-Showing that
-\(\mathbb{V}ar[\frac{dl}{d\theta}] = \phi^{-1} b''(\theta)\)
+Showing that $\mathbb{V}ar[\frac{dl}{d\theta}] = \phi^{-1} b''(\theta)$
 
-\[
+$$
 \begin{aligned}
 \mathbb{V}ar \left[ \frac{dl}{d\theta} \right] &= \mathbb{E}\left[ \left( \frac{dl}{d\theta} \right)^2 \right] \\
 &= - \mathbb{E} \left[ \frac{d^2l}{d\theta^2} \right] \\
@@ -303,55 +168,49 @@ Showing that
 &=  \mathbb{E} \left[ \left( \frac{b''(\theta)}{\phi} \right) \right] \\
 &=  \frac{b''(\theta)}{\phi}
 \end{aligned}
-\]
+$$
 
-\hypertarget{question-2}{%
-\section{Question 2}\label{question-2}}
+# Question 2
 
-\hypertarget{a-1}{%
-\subsection{a}\label{a-1}}
+## a
 
-\(Y | \theta \sim Poisson(\mu \theta)\)
+$Y | \theta \sim Poisson(\mu \theta)$
 
-\(\mathbb{E}[\theta] = 1\) and \(\mathbb{V}ar[\theta] = \sigma^2\)
+$\mathbb{E}[\theta] = 1$ and $\mathbb{V}ar[\theta] = \sigma^2$
 
-\hypertarget{i-3}{%
-\subsubsection{i)}\label{i-3}}
+### i)
 
-Showing \(\mathbb{E}[Y] = \mu\)
+Showing $\mathbb{E}[Y] = \mu$
 
-\[
+$$
 \begin{aligned}
 \mathbb{E}[Y] &= \mathbb{E}\left[\mathbb{E}[Y|\theta]\right] \\
 &= \mathbb{E}\left[\mathbb{E}\left[\frac{{e^{ - \mu\theta } (\mu\theta) ^y }}{{y!}}\right]\right] \\
 &= \mathbb{E}\left[ \mu \theta \right] \\
 &= \mu
 \end{aligned}
-\]
+$$
 
-\hypertarget{ii-3}{%
-\subsubsection{ii)}\label{ii-3}}
+### ii)
 
-Showing \(\mathbb{V}ar[Y] = \mu(1+\mu\sigma^2)\)
+Showing $\mathbb{V}ar[Y] = \mu(1+\mu\sigma^2)$
 
-\[
+$$
 \begin{aligned}
 \mathbb{V}ar[Y] &= \mathbb{E}\left[\mathbb{V}ar(Y|\theta) \right] + \mathbb{V}ar\left[\mathbb{E}(Y|\theta) \right]\\
 &= \mathbb{E}\left[ \mu \theta \right] +  \mathbb{V}ar\left[ \mu \theta \right] \\
 &= \mu + \mu^2\sigma^2 \\
 &= \mu(1+\mu\sigma^2)
 \end{aligned}
-\]
+$$
 
-\hypertarget{b-1}{%
-\subsection{b}\label{b-1}}
+## b 
 
-Assume \(\theta \sim \Gamma(\alpha, \beta)\)
+Assume $\theta \sim \Gamma(\alpha, \beta)$
 
-Showing \(Y \sim Neg Bin\)
+Showing $Y \sim Neg Bin$
 
-\$\$
-
+$$
 \begin{aligned}
 p(y) &= \int p(y|\theta) p(\theta) d\theta\\
 &= \int \frac{{e^{ - \mu\theta } (\mu\theta) ^y }}{{y!}}*\frac{ \theta^{\alpha-1}e^{-\theta / \beta}}{\beta^\alpha\Gamma(\alpha)} d\theta \\
@@ -362,267 +221,253 @@ p(y) &= \int p(y|\theta) p(\theta) d\theta\\
 &= \frac{ \Gamma(y + \alpha)}{\Gamma(\alpha) \Gamma(y + 1)} \left( \frac{\mu \beta}{\mu \beta + 1} \right)^y \left( \frac{1}{\mu \beta + 1} \right)^\alpha
 \end{aligned}
 
-\$\$
+$$
 
-\[
+
+$$
 \begin{aligned}
 p(y) &= \int p(y|\theta) p(\theta) d\theta\\
 &= \frac{ \Gamma(y + \alpha)}{\Gamma(\alpha) \Gamma(y + 1)} \left( \frac{\mu \beta}{\mu \beta + 1} \right)^y \left( \frac{1}{\mu \beta + 1} \right)^\alpha \\
 &= NB(\alpha, \frac{\mu \beta}{\mu \beta + 1})
 \end{aligned}
-\]
+$$
 
-\hypertarget{c-1}{%
-\subsection{c}\label{c-1}}
 
-\[
+## c
+
+$$
 \begin{aligned}
 \mathbb{E}[Y] &= \mu =\alpha \mu \beta  \implies \alpha\beta =1\\
 \mathbb{V}ar[Y] &= \mu + \mu^2 \sigma^2 = \alpha \mu\beta + \alpha \mu^2\beta^2 \implies \alpha\beta^2 = \sigma^2
 \end{aligned}
-\]
+$$
 
-\[
+
+$$
 \begin{aligned}
 \alpha = \frac{1}{\sigma^2}
 \\ \beta = \sigma^2
 \end{aligned}
-\]
+$$
 
-\hypertarget{question-3}{%
-\section{Question 3}\label{question-3}}
+# Question 3
 
 I refactored the code a tiny bit
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
 
-\NormalTok{X <{-}}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\OtherTok{NA}\NormalTok{, }\DecValTok{100}\NormalTok{, }\DecValTok{100}\NormalTok{)}
-\NormalTok{Y <{-}}\StringTok{ }\NormalTok{X}
-\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\DecValTok{100}\NormalTok{) \{}
-\NormalTok{  X[i, ] <{-}}\StringTok{ }\KeywordTok{rnorm}\NormalTok{(}\DecValTok{100}\NormalTok{)}
-\NormalTok{  Y[i, ] <{-}}\StringTok{ }\KeywordTok{rpois}\NormalTok{(}\DecValTok{100}\NormalTok{, }\DataTypeTok{lambda =} \KeywordTok{exp}\NormalTok{(}\FloatTok{0.5} \OperatorTok{+}\StringTok{ }\NormalTok{X[i, ] }\OperatorTok{+}\StringTok{ }\FloatTok{0.2} \OperatorTok{*}\StringTok{ }\NormalTok{X[i, ]}\OperatorTok{\^{}}\DecValTok{2}\NormalTok{))}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
+```r
+set.seed(123)
 
-\hypertarget{a-fitting-poisson-glm}{%
-\subsection{a) Fitting poisson glm}\label{a-fitting-poisson-glm}}
+X <- matrix(NA, 100, 100)
+Y <- X
+for (i in 1:100) {
+  X[i, ] <- rnorm(100)
+  Y[i, ] <- rpois(100, lambda = exp(0.5 + X[i, ] + 0.2 * X[i, ]^2))
+}
+```
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{coefs\_matrix <{-}}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\OtherTok{NA}\NormalTok{, }\DecValTok{100}\NormalTok{, }\DecValTok{3}\NormalTok{)}
-\NormalTok{ses\_matrix <{-}}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\OtherTok{NA}\NormalTok{, }\DecValTok{100}\NormalTok{, }\DecValTok{3}\NormalTok{)}
-\NormalTok{p\_vals\_check <{-}}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\OtherTok{NA}\NormalTok{, }\DecValTok{100}\NormalTok{)}
+## a) Fitting poisson glm
 
-\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\DecValTok{100}\NormalTok{) \{}
-\NormalTok{  data\_set <{-}}\StringTok{ }\KeywordTok{tibble}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ X[i, ], }\DataTypeTok{y =}\NormalTok{ Y[i, ])}
-\NormalTok{  mod <{-}}
-\StringTok{    }\KeywordTok{glm}\NormalTok{(}
-      \DataTypeTok{formula =}\NormalTok{ y }\OperatorTok{\textasciitilde{}}\StringTok{ }\NormalTok{x }\OperatorTok{+}\StringTok{ }\KeywordTok{I}\NormalTok{(x}\OperatorTok{\^{}}\DecValTok{2}\NormalTok{),}
-      \DataTypeTok{data =}\NormalTok{ data\_set,}
-      \DataTypeTok{family =}\NormalTok{ poisson}
-\NormalTok{    )}
-\NormalTok{  coefs\_matrix[i, ] <{-}}\StringTok{ }\KeywordTok{coefficients}\NormalTok{(mod)}
-\NormalTok{  ses\_matrix[i, ] <{-}}\StringTok{ }\KeywordTok{sqrt}\NormalTok{(}\KeywordTok{diag}\NormalTok{(}\KeywordTok{vcov}\NormalTok{(mod)))}
-\NormalTok{  p\_vals\_check[i] <{-}}
-\StringTok{    }\KeywordTok{wald.test}\NormalTok{(}
-      \DataTypeTok{b =} \KeywordTok{coef}\NormalTok{(mod),}
-      \DataTypeTok{Sigma =} \KeywordTok{vcov}\NormalTok{(mod),}
-      \DataTypeTok{Terms =} \DecValTok{2}\NormalTok{,}
-      \DataTypeTok{H0 =} \DecValTok{1}
-\NormalTok{    )}\OperatorTok{$}\NormalTok{result}\OperatorTok{$}\NormalTok{chi2[}\DecValTok{3}\NormalTok{]}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
 
-\hypertarget{b-coverage-probability-for-2se-on-x}{%
-\subsection{b) coverage probability for 2SE on
-x}\label{b-coverage-probability-for-2se-on-x}}
+```r
+coefs_matrix <- matrix(NA, 100, 3)
+ses_matrix <- matrix(NA, 100, 3)
+p_vals_check <- rep(NA, 100)
 
-Since this is an MLE blah blah blah it's enough to look at normal CDF up
-to 2 sd so the coverage is 0.9772499
+for (i in 1:100) {
+  data_set <- tibble(x = X[i, ], y = Y[i, ])
+  mod <-
+    glm(
+      formula = y ~ x + I(x^2),
+      data = data_set,
+      family = poisson
+    )
+  coefs_matrix[i, ] <- coefficients(mod)
+  ses_matrix[i, ] <- sqrt(diag(vcov(mod)))
+  p_vals_check[i] <-
+    wald.test(
+      b = coef(mod),
+      Sigma = vcov(mod),
+      Terms = 2,
+      H0 = 1
+    )$result$chi2[3]
+}
+```
 
-The actual proportion of coefficients outside of the intervals is 4
-which is 4\% for a coverage probability of \textasciitilde96\%
+## b) coverage probability for 2SE on x 
 
-Is this valid for x? Not 100\% since the variables are not independent,
-in principle they should be uncorrelated but in practice their cor is
-0.2974821 this will definitely fudge with inference, but hopefully in a
-minor way.
+Since this is an MLE blah blah blah it's enough to look at normal CDF up to 2 sd
+so the coverage is 0.9772499
 
-Also, doesn't really match the 95\% CI thing.
+The actual proportion of coefficients outside of the intervals is 
+4
+which is 4% for a coverage probability of ~96%
 
-\hypertarget{c-wald-tests}{%
-\subsection{c) Wald tests}\label{c-wald-tests}}
+Is this valid for x? Not 100% since the variables are not independent, in principle
+they should be uncorrelated but in practice their cor is 0.2974821
+this will definitely fudge with inference, but hopefully in a minor way.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{p\_vals <{-}}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\OtherTok{NA}\NormalTok{, }\DecValTok{100}\NormalTok{)}
+Also, doesn't really match the 95% CI thing. 
 
-\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\DecValTok{100}\NormalTok{) \{}
-\NormalTok{  W <{-}}\StringTok{ }\NormalTok{(coefs\_matrix[i, }\DecValTok{2}\NormalTok{] }\OperatorTok{{-}}\StringTok{ }\DecValTok{1}\NormalTok{) }\OperatorTok{/}\StringTok{ }\NormalTok{ses\_matrix[i, }\DecValTok{2}\NormalTok{]}
-\NormalTok{  p\_vals[i] <{-}}\StringTok{ }\DecValTok{1} \OperatorTok{{-}}\StringTok{ }\NormalTok{(}\KeywordTok{pnorm}\NormalTok{(}\KeywordTok{abs}\NormalTok{(W)) }\OperatorTok{{-}}\StringTok{ }\KeywordTok{pnorm}\NormalTok{(}\OperatorTok{{-}}\KeywordTok{abs}\NormalTok{(W)))}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
+## c) Wald tests
+
+
+```r
+p_vals <- rep(NA, 100)
+
+for (i in 1:100) {
+  W <- (coefs_matrix[i, 2] - 1) / ses_matrix[i, 2]
+  p_vals[i] <- 1 - (pnorm(abs(W)) - pnorm(-abs(W)))
+}
+```
 
 Test was rejected in 4 case(s).
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{set.seed}\NormalTok{(}\DecValTok{321}\NormalTok{)}
 
-\NormalTok{X2 <{-}}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\OtherTok{NA}\NormalTok{, }\DecValTok{100}\NormalTok{, }\DecValTok{100}\NormalTok{)}
-\NormalTok{Y2 <{-}}\StringTok{ }\NormalTok{X2}
-\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\DecValTok{100}\NormalTok{) \{}
-\NormalTok{  weights <{-}}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(X[i, ] }\OperatorTok{>}\StringTok{ }\DecValTok{1}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{1}\NormalTok{)}
-\NormalTok{  probs <{-}}\StringTok{ }\NormalTok{weights }\OperatorTok{/}\StringTok{ }\KeywordTok{sum}\NormalTok{(weights)}
-\NormalTok{  to\_keep\_}\DecValTok{2}\NormalTok{ <{-}}\StringTok{ }\KeywordTok{sample}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(X[i, ]), }\DecValTok{25}\NormalTok{, }\DataTypeTok{prob =}\NormalTok{ probs)}
-\NormalTok{  X2[i, ] <{-}}\StringTok{ }\NormalTok{X[i, to\_keep\_}\DecValTok{2}\NormalTok{]}
-\NormalTok{  Y2[i, ] <{-}}\StringTok{ }\NormalTok{Y[i, to\_keep\_}\DecValTok{2}\NormalTok{]}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
+```r
+set.seed(321)
 
-\hypertarget{d}{%
-\subsection{d)}\label{d}}
+X2 <- matrix(NA, 100, 100)
+Y2 <- X2
+for (i in 1:100) {
+  weights <- ifelse(X[i, ] > 1, 10, 1)
+  probs <- weights / sum(weights)
+  to_keep_2 <- sample(1:length(X[i, ]), 25, prob = probs)
+  X2[i, ] <- X[i, to_keep_2]
+  Y2[i, ] <- Y[i, to_keep_2]
+}
+```
 
-\hypertarget{glms}{%
-\subsubsection{GLMs}\label{glms}}
+## d)
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{coefs\_matrix2 <{-}}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\OtherTok{NA}\NormalTok{, }\DecValTok{100}\NormalTok{, }\DecValTok{3}\NormalTok{)}
-\NormalTok{ses\_matrix2 <{-}}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\OtherTok{NA}\NormalTok{, }\DecValTok{100}\NormalTok{, }\DecValTok{3}\NormalTok{)}
+### GLMs
+
+```r
+coefs_matrix2 <- matrix(NA, 100, 3)
+ses_matrix2 <- matrix(NA, 100, 3)
 
 
-\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\DecValTok{100}\NormalTok{) \{}
-\NormalTok{  data\_set <{-}}\StringTok{ }\KeywordTok{tibble}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ X2[i, ], }\DataTypeTok{y =}\NormalTok{ Y2[i, ])}
-\NormalTok{  mod <{-}}\StringTok{ }\KeywordTok{glm}\NormalTok{(}
-    \DataTypeTok{formula =}\NormalTok{ y }\OperatorTok{\textasciitilde{}}\StringTok{ }\NormalTok{x }\OperatorTok{+}\StringTok{ }\KeywordTok{I}\NormalTok{(x}\OperatorTok{\^{}}\DecValTok{2}\NormalTok{),}
-    \DataTypeTok{data =}\NormalTok{ data\_set,}
-    \DataTypeTok{family =}\NormalTok{ poisson}
-\NormalTok{  )}
-\NormalTok{  coefs\_matrix2[i, ] <{-}}\StringTok{ }\KeywordTok{coefficients}\NormalTok{(mod)}
-\NormalTok{  ses\_matrix2[i, ] <{-}}\StringTok{ }\KeywordTok{sqrt}\NormalTok{(}\KeywordTok{diag}\NormalTok{(}\KeywordTok{vcov}\NormalTok{(mod)))}
-\NormalTok{\}}
+for (i in 1:100) {
+  data_set <- tibble(x = X2[i, ], y = Y2[i, ])
+  mod <- glm(
+    formula = y ~ x + I(x^2),
+    data = data_set,
+    family = poisson
+  )
+  coefs_matrix2[i, ] <- coefficients(mod)
+  ses_matrix2[i, ] <- sqrt(diag(vcov(mod)))
+}
 
-\NormalTok{num\_inside\_interval <{-}}
-\StringTok{  }\KeywordTok{sum}\NormalTok{(coefs\_matrix2[, }\DecValTok{2}\NormalTok{] }\OperatorTok{+}\StringTok{ }\DecValTok{2} \OperatorTok{*}\StringTok{ }\NormalTok{ses\_matrix2[, }\DecValTok{2}\NormalTok{] }\OperatorTok{<}\StringTok{ }\DecValTok{1}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{sum}\NormalTok{(coefs\_matrix2[, }\DecValTok{2}\NormalTok{] }\OperatorTok{{-}}\StringTok{ }\DecValTok{2} \OperatorTok{*}\StringTok{ }\NormalTok{ses\_matrix2[, }\DecValTok{2}\NormalTok{] }\OperatorTok{>}\StringTok{ }\DecValTok{1}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
+num_inside_interval <-
+  sum(coefs_matrix2[, 2] + 2 * ses_matrix2[, 2] < 1) + sum(coefs_matrix2[, 2] - 2 * ses_matrix2[, 2] > 1)
+```
 
-\hypertarget{coverage-probabilities}{%
-\subsubsection{Coverage probabilities:}\label{coverage-probabilities}}
+### Coverage probabilities:
 
-The actual proportion of coefficients outside of the intervals is 28
-which is 28\% for a coverage probability of 72\%
+The actual proportion of coefficients outside of the intervals is 
+28
+which is 28% for a coverage probability of 72%
 
-\hypertarget{wald-tests}{%
-\subsubsection{Wald tests:}\label{wald-tests}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{p\_vals2 <{-}}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\OtherTok{NA}\NormalTok{, }\DecValTok{100}\NormalTok{)}
+### Wald tests:
 
 
-\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\DecValTok{100}\NormalTok{) \{}
-\NormalTok{  W <{-}}\StringTok{ }\NormalTok{(coefs\_matrix2[i, }\DecValTok{2}\NormalTok{] }\OperatorTok{{-}}\StringTok{ }\DecValTok{1}\NormalTok{) }\OperatorTok{/}\StringTok{ }\NormalTok{ses\_matrix2[i, }\DecValTok{2}\NormalTok{]}
-\NormalTok{  p\_vals2[i] <{-}}\StringTok{ }\DecValTok{1} \OperatorTok{{-}}\StringTok{ }\NormalTok{(}\KeywordTok{pnorm}\NormalTok{(}\KeywordTok{abs}\NormalTok{(W)) }\OperatorTok{{-}}\StringTok{ }\KeywordTok{pnorm}\NormalTok{(}\OperatorTok{{-}}\KeywordTok{abs}\NormalTok{(W)))}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
+```r
+p_vals2 <- rep(NA, 100)
 
-Test was rejected in 29 cases which more or less agrees with the
-coverages calculated before.
 
-\hypertarget{e}{%
-\subsection{e)}\label{e}}
+for (i in 1:100) {
+  W <- (coefs_matrix2[i, 2] - 1) / ses_matrix2[i, 2]
+  p_vals2[i] <- 1 - (pnorm(abs(W)) - pnorm(-abs(W)))
+}
+```
 
-What's happening is that we now have some selection process in the data.
-In this particular case, high values of x were more likely to show up in
-the dataset.
+Test was rejected in 29 cases which more or less
+agrees with the coverages calculated before.
 
-\hypertarget{question-4}{%
-\section{Question 4}\label{question-4}}
 
-\hypertarget{a---eda}{%
-\subsection{a) - EDA}\label{a---eda}}
+## e)
 
-First I will generate a ton of plots of variables to visually look for
-patterns.
+What's happening is that we now have some selection process in the data. In this
+particular case, high values of x were more likely to show up in the dataset.
 
-\includegraphics{Assignment_1_files/figure-latex/death distributions-1.pdf}
 
-I can tell that the distribution is right-skewed and with quite some
-observations out in the high deathcounts. This is without context so
-next I wanna see if some particular states have large variations (of
-course they do)
+# Question 4
 
-\includegraphics{Assignment_1_files/figure-latex/plots2-1.pdf}
 
-There are a couple of states with huge variations like OH (Ohio?) or FL
-(Florida) and quite a few of the states have very low variations and low
-numbers. This is not as likely due to just population since California
-would be somewhere in the sky. Next I'm gonna make sure that it's true
-by looking at deaths vs pop and color the states.
 
-\includegraphics{Assignment_1_files/figure-latex/plots3-1.pdf}
+## a) - EDA
 
-There seems to be a population pattern to some degree (fair), but
-overall there seems to be quite a lot of variation that's outside of
-that. Let's look at mortality (deaths / pop) to see if there is
-something a bit easier to spot.
+First I will generate a ton of plots of variables to visually look for patterns.
 
-\includegraphics{Assignment_1_files/figure-latex/plots4-1.pdf}
+![](Assignment_1_files/figure-latex/death distributions-1.pdf)<!-- --> 
 
-This should show the variation in deaths that are not exactly just due
-to high pop. Clearly there are some states that are way out there (again
-OH). Let's check out the expected deaths vs actual
+I can tell that the distribution is right-skewed and with quite some observations
+out in the high deathcounts. This is without context so next I wanna see if 
+some particular states have large variations (of course they do)
 
-\includegraphics{Assignment_1_files/figure-latex/plots5-1.pdf}
 
-This seems to make a lot better at predicting the actual deaths.
-Probably a solid variable to use but by the data dictionary provided
-it's a derivative of the other variables provided so probably unwise to
-use it alongside them and make statements about those variables'
-coefficients.
+![](Assignment_1_files/figure-latex/plots2-1.pdf)<!-- --> 
+
+There are a couple of states with huge variations like OH (Ohio?) or FL (Florida)
+and quite a few of the states have very low variations and low numbers. This is
+not as likely due to just population since California would be somewhere in the
+sky. Next I'm gonna make sure that it's true by looking at deaths vs pop and 
+color the states.
+
+
+![](Assignment_1_files/figure-latex/plots3-1.pdf)<!-- --> 
+
+There seems to be a population pattern to some degree (fair), but overall there
+seems to be quite a lot of variation that's outside of that. Let's look at 
+mortality (deaths / pop) to see if there is something a bit easier to spot.
+
+![](Assignment_1_files/figure-latex/plots4-1.pdf)<!-- --> 
+
+This should show the variation in deaths that are not exactly just due to
+high pop. Clearly there are some states that are way out there (again OH).
+Let's check out the expected deaths vs actual
+
+![](Assignment_1_files/figure-latex/plots5-1.pdf)<!-- --> 
+
+This seems to make a lot better at predicting the actual deaths. Probably a solid
+variable to use but by the data dictionary provided it's a derivative of the other
+variables provided so probably unwise to use it alongside them and make statements
+about those variables' coefficients. 
 
 Let's check out whiteness
 
-\includegraphics{Assignment_1_files/figure-latex/plots6-1.pdf}
+![](Assignment_1_files/figure-latex/plots6-1.pdf)<!-- --> 
 
 I can see a woman yelling at a worm. This is a typical example of this:
 
-\includegraphics{figures/xkcd_linear_regression.png}
+![](figures/xkcd_linear_regression.png)
 
-I don't think it's worth using it as a predictor. I could probably
-massage this a bit and get something for the model but I highly doubt it
-would have any real meaning. Let's check out prescription rates:
+I don't think it's worth using it as a predictor. I could probably massage this
+a bit and get something for the model but I highly doubt it would have any real
+meaning. Let's check out prescription rates:
 
-\includegraphics{Assignment_1_files/figure-latex/plots7-1.pdf}
+![](Assignment_1_files/figure-latex/plots7-1.pdf)<!-- --> 
 
-Again there seems to be very minimal trend with overall prescription
-rates. I don't think it's that good of a var. I could try to massage it
-a bit by getting it to be prescription numbers
+Again there seems to be very minimal trend with overall prescription rates. 
+I don't think it's that good of a var. I could try to massage it a bit by getting
+it to be prescription numbers 
 
 Finally let's take a look at the situation in the job market:
 
-\includegraphics{Assignment_1_files/figure-latex/plots8-1.pdf}
+![](Assignment_1_files/figure-latex/plots8-1.pdf)<!-- --> 
 
-Again there doesn't seem to be that much of a pattern. I don't know if
-the variable is worthwhile to use.
+Again there doesn't seem to be that much of a pattern. I don't know if the
+variable is worthwhile to use.
 
 Let's take a peek at the correlations
 
-\includegraphics{Assignment_1_files/figure-latex/plots9-1.pdf}
+![](Assignment_1_files/figure-latex/plots9-1.pdf)<!-- --> 
 
-I think the predictors to include overall are (either expected\_deaths
-or total\_pop), plus state and prescription rate.
+I think the predictors to include overall are (either expected_deaths or
+total_pop), plus state and prescription rate. 
 
 Let's look at some summaries:
+
 
 \begin{tabular}{l|r|r|r|r|r|r|r|r}
 \hline
@@ -732,10 +577,10 @@ Wyoming & 10 & 45.2 & 3.573333e+01 & 46.5 & 32 & 54 & 0.0000788 & 0\\
 \hline
 \end{tabular}
 
-\hypertarget{b-poisson-regression}{%
-\subsection{b) Poisson Regression}\label{b-poisson-regression}}
+## b) Poisson Regression
 
-\begin{verbatim}
+
+```
 ## 
 ## Call:
 ## glm(formula = deaths ~ expected_deaths + state + prescription_rate, 
@@ -810,37 +655,33 @@ Wyoming & 10 & 45.2 & 3.573333e+01 & 46.5 & 32 & 54 & 0.0000788 & 0\\
 ## AIC: 22843
 ## 
 ## Number of Fisher Scoring iterations: 4
-\end{verbatim}
+```
 
-\includegraphics{Assignment_1_files/figure-latex/visualizing poiss reg-1.pdf}
+![](Assignment_1_files/figure-latex/visualizing poiss reg-1.pdf)<!-- --> 
 
-We can see that the states coefficients are all over the place - even
-when we notice that the expected\_deaths and prescription rate vars are
-included. This means there is most likely something else going on in
-there.
+We can see that the states coefficients are all over the place - even when we notice
+that the expected_deaths and prescription rate vars are included. This means there
+is most likely something else going on in there. 
 
-Interpretations: (note that these are not perfectly valid since the
-variables are related with eachother so size of individual effects is
-approximate)
+Interpretations: (note that these are not perfectly valid since the variables
+are related with eachother so size of individual effects is approximate)
 
-\begin{itemize}
-\item
-  accounting for prescription rate and expected deaths people from the
-  state of Texas (random pick) are 55.5571941\% less likely to die than
-  the average person in the US
-\item
-  accounting for state and expected deaths an increase of one in
-  prescription rate per 100 inhabitants results in an estimated
-  2.2839667\% lower death rate than the average person in the US
-\item
-  accounting for state and prescription rate, increase in variables
-  (national opioid mortality and state age population) leading to an
-  increase of expected deaths by one leads to an estimated -0.0118604\%
-  decrease (so an increase by 0.0118604\%) in estimated chances of
-  dying.
-\end{itemize}
+* accounting for prescription rate and expected deaths people from the state of
+Texas (random pick) are 55.5571941% less
+likely to die than the average person in the US
+
+* accounting for state and expected deaths an increase of one in prescription 
+rate per 100 inhabitants results in an estimated 2.2839667%
+lower death rate than the average person in the US
+
+* accounting for state and prescription rate, increase in variables (national opioid mortality and
+state age population) leading to an increase of expected deaths by one leads to
+an estimated -0.0118604% decrease
+(so an increase by 0.0118604%) 
+in estimated chances of dying.
 
 States with highest mortality:
+
 
 \begin{tabular}{l|r}
 \hline
@@ -868,19 +709,18 @@ stateRhode Island & 0.996589\\
 \hline
 \end{tabular}
 
-\hypertarget{c-population-offset}{%
-\subsection{c) Population offset}\label{c-population-offset}}
 
-by the hint - population age distribution (as well as other possible
-confounds) are not accounted for - old people in Florida probably die a
-lot more than the youth in Washington. This should be accounted for by
-expected deaths variable.
+## c) Population offset
 
-\hypertarget{d-poisson-regression---expected_deaths}{%
-\subsection{d) Poisson Regression -
-expected\_deaths}\label{d-poisson-regression---expected_deaths}}
+by the hint - population age distribution (as well as other possible confounds)
+are not accounted for - old people in Florida probably die
+a lot more than the youth in Washington. This should be accounted for by 
+expected deaths variable. 
 
-\begin{verbatim}
+## d) Poisson Regression - expected_deaths
+
+
+```
 ## 
 ## Call:
 ## glm(formula = deaths ~ state + prescription_rate, family = poisson, 
@@ -954,19 +794,17 @@ expected\_deaths}\label{d-poisson-regression---expected_deaths}}
 ## AIC: 17641
 ## 
 ## Number of Fisher Scoring iterations: 4
-\end{verbatim}
+```
 
-Previously the interpretation of
-\((1 - exp(\text{coefficient}) )* 100\%\) was that the variable was
-associated with that \% decrease in mortality compared to the average
-person in the population assuming that all populations are the same in
-distribution just not in number.
+Previously the interpretation of $(1 - exp(\text{coefficient}) )* 100\%$ was that
+the variable was associated with that % decrease in mortality compared to the 
+average person in the population assuming that all populations are the same in
+distribution just not in number. 
 
-Now this is gonna take into account that the populations have different
-distributions.
+Now this is gonna take into account that the populations have different distributions.
 
-\hypertarget{e-overdispersion}{%
-\subsection{e) Overdispersion}\label{e-overdispersion}}
+## e) Overdispersion
+
 
 \begin{tabular}{r|r}
 \hline
@@ -980,15 +818,16 @@ These definitely don't have standard deviation of 1!
 
 Estimated overdispersion factor:
 
+
+
 The overdispersion factor is 27.5231973 which means that the standard
-errors are inflated by 5.2462556 which is quite a bit. So yeah, there is
-an issue.
+errors are inflated by 5.2462556 which is quite a bit.
+So yeah, there is an issue.
 
-\hypertarget{f-negative-binomial-regression}{%
-\subsection{f) Negative Binomial
-Regression}\label{f-negative-binomial-regression}}
+## f) Negative Binomial Regression 
 
-\begin{verbatim}
+
+```
 ## 
 ## Call:
 ## MASS::glm.nb(formula = deaths ~ expected_deaths + state + prescription_rate, 
@@ -1069,28 +908,28 @@ Regression}\label{f-negative-binomial-regression}}
 ##           Std. Err.:  0.984 
 ## 
 ##  2 x log-likelihood:  -5989.177
-\end{verbatim}
+```
 
-It does change quite a few of significaces down to not-significant. The
-states could probably be grouped more into buckets of states either by
-region or by population distribution. As expected.
+It does change quite a few of significaces down to not-significant. The states 
+could probably be grouped more into buckets of states either by region or by 
+population distribution. As expected.
 
 LRT:
 
-P-value is 0 (pretty much zero) so NB is much better. This is also very
-clear from looking at raw likelihood numbers - the difference is in the
-thousands while the df difference is exactly 1 (the theta for NB)
 
-\hypertarget{g-summary}{%
-\subsection{g) Summary}\label{g-summary}}
 
-After iterating through a bunch of models (none of which were a very
-good fit) it's clear that the expected number of deaths is predictive of
-mortality, the mortality is also highly variable per state, due to
-things other than prescription rate and population size and distribution
-as well as unemployment. Presecription rate seems to have an effect.
-Overall there definitely is a need for both: a more advanced modelling
-approach and a larger number of variables that could help account for
-the inter-state variation.
+P-value is 0 (pretty much zero) so NB is much better. This is also very clear from
+looking at raw likelihood numbers - the difference is in the thousands while the
+df difference is exactly 1 (the theta for NB)
 
-\end{document}
+## g) Summary
+
+After iterating through a bunch of models (none of which were a very good fit)
+it's clear that the expected number of deaths is predictive of mortality,
+the mortality is also highly variable per state, due to things other than
+prescription rate and population size and distribution as well as unemployment. 
+Presecription rate seems to have an effect. Overall there definitely is a need for
+both: a more advanced modelling approach and a larger number of variables that
+could help account for the inter-state variation. 
+
+

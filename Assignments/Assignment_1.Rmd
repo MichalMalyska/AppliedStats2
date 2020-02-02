@@ -23,7 +23,7 @@ $$
 
 ## a)
 
-Show $$\int \frac{dp}{d\theta} dy = 0$$ and $$\int \frac{d^2p}{d\theta^2} dy = 0$$
+Show $\int \frac{dp}{d\theta} dy = 0$ and $\int \frac{d^2p}{d\theta^2} dy = 0$
 
 ### i)
 Showing:
@@ -177,7 +177,7 @@ Showing $Y \sim Neg Bin$
 
 $$
 \begin{aligned}
-p(y) &= \int p(y|\theta) p(\theta) d\theta\\
+p(y) &= \int p(y|\theta) p(\theta) d\theta \\
 &= \int \frac{{e^{ - \mu\theta } (\mu\theta) ^y }}{{y!}}*\frac{ \theta^{\alpha-1}e^{-\theta / \beta}}{\beta^\alpha\Gamma(\alpha)} d\theta \\
 &= \frac{\mu^y}{\beta^{\alpha} \Gamma(\alpha) y!} \int e^{-\mu\theta} \theta^{y} \theta^{\alpha-1} e^{- \theta / \beta} d\theta \\
 &= \frac{\mu^y}{\beta^{\alpha}\Gamma(\alpha) y!} \int e^{-(\mu + 1/\beta)\theta} \theta^{y + \alpha -1} d\theta \\
@@ -185,13 +185,12 @@ p(y) &= \int p(y|\theta) p(\theta) d\theta\\
 &= \frac{ \Gamma(y + \alpha)}{\Gamma(\alpha) \Gamma(y + 1)} * \frac{\mu^y\beta^{\alpha + y}}{\beta^{\alpha}} * \left( \beta\mu + 1 \right)^{-\alpha-y} \\
 &= \frac{ \Gamma(y + \alpha)}{\Gamma(\alpha) \Gamma(y + 1)} \left( \frac{\mu \beta}{\mu \beta + 1} \right)^y \left( \frac{1}{\mu \beta + 1} \right)^\alpha
 \end{aligned}
-
 $$
 
 
 $$
 \begin{aligned}
-p(y) &= \int p(y|\theta) p(\theta) d\theta\\
+p(y) &= \int p(y|\theta) p(\theta) d\theta \\
 &= \frac{ \Gamma(y + \alpha)}{\Gamma(\alpha) \Gamma(y + 1)} \left( \frac{\mu \beta}{\mu \beta + 1} \right)^y \left( \frac{1}{\mu \beta + 1} \right)^\alpha \\
 &= NB(\alpha, \frac{\mu \beta}{\mu \beta + 1})
 \end{aligned}
@@ -210,8 +209,8 @@ $$
 
 $$
 \begin{aligned}
-\alpha = \frac{1}{\sigma^2}
-\\ \beta = \sigma^2
+\alpha &= \frac{1}{\sigma^2} \\ 
+\beta &= \sigma^2
 \end{aligned}
 $$
 
@@ -572,6 +571,9 @@ distribution just not in number.
 Now this is gonna take into account that the populations have different distributions.
 
 ## e) Overdispersion
+
+Let's look at mean and sd of residuals, these should be 0 and 1 respectively for
+not overdispersed data.
 
 ```{r overdispersion, echo=FALSE}
 

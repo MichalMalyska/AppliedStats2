@@ -192,14 +192,14 @@ In most cases it will be straightforward and may not need much more than `instal
 To make sure it works, run the following code:
 
 ```{r}
-# library(brms)
-# 
-# x <- rnorm(100)
-# y <- 1 + 2*x + rnorm(100)
-# d <- tibble(x = x, y = y)
-# 
-# mod <- brm(y~x, data = d)
-# summary(mod)
+library(brms)
+
+x <- rnorm(100)
+y <- 1 + 2*x + rnorm(100)
+d <- tibble(x = x, y = y)
+
+mod <- brm(y~x, data = d)
+summary(mod)
 
 ```
 

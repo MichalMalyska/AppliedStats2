@@ -285,18 +285,38 @@ fit4
 
 Interpretation: 
 
-Since the coefficient was 0.57 
+Since the coefficient estimate was about 0.57 we can say that for every
+IQ point higher than average the estimated kid score increases by 0.57 
 
 ## Question 5 
 
 Confirm the results from Stan agree with `lm()`
 
 ```{r Check stuff out}
-
+linmod2 <- lm(data = kidiq, formula = kid_score ~ mom_hs + mom_iq)
+summary(linmod2)
 ```
 
+It seems to agree very well: 0.56 vs 0.57 for LM vs STAN for the IQ
+5.95 vs 5.64 for LM vs STAN for the Age 
+
+and finall 25.7 vs 82.39 for LM vs STAN which does not agree at all. 
 
 ## Question 6
 
 Plot the posterior estimates of scores by education of mother for mothers who have an IQ of 110. 
+
+```{r Plot Q6}
+fit4 %>%
+  spread_draws(alpha, beta[condition], sigma) %>%
+  pivot_wider(names_from = condition, names_prefix = "beta", values_from = beta) %>% 
+     mutate(nhs = alpha + beta2 * 10, # no high school is just the intercept
+          hs = alpha + beta1 + beta2 * 10) %>% 
+  pivot_longer(nhs:hs, names_to = "education", values_to = "estimated_score") %>% 
+  ggplot(aes(y = education, x = estimated_score)) +
+  stat_halfeyeh() + 
+  theme_bw() + 
+  ggtitle("Posterior estimates of scores by education level of mother for mothers with IQ 110")
+
+```
 

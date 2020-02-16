@@ -182,7 +182,7 @@ betas <- rep(NA, length(years))
 
 
 for (i in 1:length(years)) {
-	print(i)
+	# print(i)
 	 # fit model
 	df_model <- df_c %>%
 		filter(year == years[i])
@@ -194,29 +194,132 @@ for (i in 1:length(years)) {
 	
 	df_model$loghx_pred <- predict(lm_loop, newdata = df_model)
 	
-	df_plot <- df_model %>% pivot_longer(cols = c("loghx_pred", "loghx"), names_to = "type", values_to = "log_hazard")
-	p <- df_plot %>% ggplot(aes(x = age, y = log_hazard, color = type)) +
+	# df_plot <- df_model %>% pivot_longer(cols = c("loghx_pred", "loghx"), names_to = "type", values_to = "log_hazard")
+	# p <- df_plot %>% ggplot(aes(x = age, y = log_hazard, color = type)) +
+	# geom_point() +
+	# theme_minimal() +
+	# labs(title = paste0("log hazards for predicted vs actual for the year ", years[i]))
+	# print(p)
+}
+
+```
+```{r Plot of alphas and betas}
+
+df_all_years <- tibble(year = years, alpha = alphas,beta = betas) %>%
+	mutate(mode = log(beta / alpha) / beta)
+
+df_all_years %>%
+	ggplot(aes(x = year, y = alpha)) +
 	geom_point() +
 	theme_minimal() +
-	labs(title = paste0("log hazards for predicted vs actual for the year ", years[i]))
-	print(p)
-}
+	labs(title = "Alphas over time")
+
+df_all_years %>%
+	ggplot(aes(x = year, y = beta)) +
+	geom_point() +
+	theme_minimal() +
+	labs(title = "Betas over time")
+
+df_all_years %>%
+	ggplot(aes(x = year, y = mode)) +
+	geom_point() +
+	theme_minimal() +
+	labs(title = "Mode over time")
+
+```
+
+TODO: describe
+
+# Question 2
+
+```{r Load data}
+
+deaths <- read_rds(here("data", "infant.RDS"))
+births <- read_rds(here("data", "births.RDS"))
 
 ```
 
 
-# Question 2
-
 ## a
+
+```{r Q2a}
+
+tot_deaths <- deaths %>% group_by(race) %>% summarize(deaths = n())
+tot_births <- births %>% group_by(race) %>% summarize(births = sum(births))
+
+summary_tbl <- left_join(tot_deaths, tot_births) %>%
+	mutate(IMR = deaths / births)
+
+kableExtra::kable(summary_tbl, format = "html")
+
+mortalities <- summary_tbl %>% pull(IMR)
+ratio <- mortalities[1] / mortalities[2]
+```
+
+So we have that the ratio of black to white mortality is `r ratio`
 
 ## b
 
+```{r Q2b}
+library(survival)
+
+deaths_sum <- deaths %>% group_by(race, prematurity, aged) %>% summarize(deaths = n()) 
+
+km_df <- deaths_sum %>% mutate(deaths_tot = cumsum(deaths)) %>% 
+	left_join(births) %>%
+	mutate(exposure = births - deaths_tot + deaths,
+		   hazard = deaths / exposure, 
+		   survival = cumprod(1 - hazard),
+		   var_comp = hazard / (exposure - deaths),
+		   variance  = survival^2 * cumsum(var_comp),
+		   survival_plus_two = survival + 2 * sqrt(variance),
+		   survival_minus_two = survival - 2 * sqrt(variance)
+	)
+
+```
+
 ## c
+
+```{r Q2c}
+ 
+km_df %>% filter(race == "NHB") %>%
+	ggplot() +
+	aes(x = aged, y = survival, m = survival_plus_two, n = survival_minus_two,  facet = prematurity) +
+	geom_path() +
+	facet_grid(prematurity~., scales = "free_y") +
+	geom_line(aes(y = survival_plus_two), color = "red") +
+	geom_line(aes(y = survival_minus_two),color = "red") +
+	theme_bw() +
+	labs(title = "NHB")
+
+km_df %>% filter(race != "NHB") %>%
+	ggplot() +
+	aes(x = aged, y = survival, m = survival_plus_two, n = survival_minus_two,  facet = prematurity) +
+	geom_path() +
+	facet_grid(prematurity~., scales = "free_y") +
+	geom_line(aes(y = survival_plus_two), color = "red") +
+	geom_line(aes(y = survival_minus_two),color = "red") +
+	theme_bw() +
+	labs(title = "NHW")
+	
+```
+
 
 ## d
 
 ## e
 
+Because the births are not equal so higher mortality is not the same as high
+number of deaths. 
+
 ## f
+
+```{r piecewise constant}
+
+times <- c(1, 7, 14, 28, 60, 90, 120)
+
+
+```
+
 
 ## g

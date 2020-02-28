@@ -271,7 +271,7 @@ mod2 <- stan(data = stan_data,
              iter = 250,
              seed = 243)
 
-summary(mod2)$summary[c("beta[1]", "beta[2]", "sigma"),]
+summary(mod2)$summary[c(paste0("beta[", 1:4, "]"), "sigma"),]
 ```
 
 ## Question 4
@@ -281,9 +281,8 @@ For reference I have uploaded some model 2 results. Check your results are simil
 ```{r}
 load(here("output", "mod2.Rda"))
 summary(mod2)$summary[c(paste0("beta[", 1:4, "]"), "sigma"),]
+
 ```
-
-
 
 # PPCs
 
@@ -302,6 +301,52 @@ ppc_dens_overlay(y, yrep1[samp100, ])  + ggtitle("distribution of observed versu
 
 Make a similar plot to the one above but for model 2, and **not** using the bayes plot in built function (i.e. do it yourself just with `geom_density`)
 
+```{r}
+samp100_2 <- sample(nrow(yrep2), 100)
+y2 <- as_tibble(t(yrep2[samp100_2, ]))
+
+# data easier to plot
+colnames(y2) <- 1:100
+
+dr <- as_tibble(y2)
+dr <- dr %>% bind_cols(i = 1:3842, log_weight_obs = log(ds$birthweight))
+
+dr <- dr %>% 
+  pivot_longer(`1`:`100`, names_to = "sim", values_to = "log_weight_rep")
+
+# plot densities for 100 samples
+
+set.seed(176)
+
+dr %>% 
+  ggplot(aes(log_weight_rep, group = sim)) + 
+  geom_density(alpha = 0.2, aes(color = "y_rep")) + 
+  geom_density(data = ds %>% mutate(sim = 1), 
+               aes(x = log(birthweight), col = "y")) + 
+  scale_color_manual(name = "", 
+                     values = c("y" = "darkblue", 
+                                "y_rep" = "lightblue")) + 
+  ggtitle("Distribution of observed vs predicted birthweights") + 
+  theme_bw(base_size = 16)
+
+```
+
+This seemed super narrow at first but it is just because of the x axis scale.
+
+```{r}
+dr %>% 
+  ggplot(aes(log_weight_rep, group = sim)) + 
+  geom_density(alpha = 0.2, aes(color = "y_rep")) + 
+  geom_density(data = ds %>% mutate(sim = 1), 
+               aes(x = log(birthweight), col = "y")) + 
+  scale_color_manual(name = "", 
+                     values = c("y" = "darkblue", 
+                                "y_rep" = "lightblue")) + 
+  ggtitle("Distribution of observed vs predicted birthweights") + 
+  theme_bw(base_size = 16) +
+  scale_x_continuous(limits = c(-1, 2))
+```
+
 ## Test statistics
 
 We can also look at some summary statistics in the PPD versus the data, again either using `bayesplot` -- the function of interest is `ppc_stat` or `ppc_stat_grouped` -- or just doing it ourselves using ggplot. 
@@ -315,6 +360,22 @@ ppc_stat_grouped(ds$log_weight, yrep1, group = ds$preterm, stat = 'median')
 ## Question 6
 
 Use a test statistic of the proportion of births under 2.5kg. Calculate the test statistic for the data, and the posterior predictive samples for both models, and plot the comparison (one plot per model). 
+
+```{r}
+test_stat_real <- mean(ds$birthweight < 2.5)
+test_stat_rep <- dr %>% group_by(sim) %>%
+  summarize(test_stat = mean(exp(log_weight_rep) < 2.5))
+
+test_stat_rep %>%
+  ggplot(aes(x = test_stat)) +
+  geom_histogram(bins = 20, fill = "lightblue") +
+  geom_vline(xintercept = test_stat_real, color = "darkblue") +
+  theme_minimal() +
+  labs(caption = "simulated test statistics in light blue \n real test statistic in dark blue",
+       title = "Test Statistics for PPC for proportion of bw < 2.5kg")
+
+```
+
 
 # LOO
 
@@ -344,7 +405,7 @@ loo2
 Comparing the two models tells us Model 2 is better:
 
 ```{r}
-compare(loo1, loo2)
+loo_compare(loo1, loo2)
 ```
 
 We can also compare the LOO-PIT of each of the models to standard uniforms. The both do pretty well. 

@@ -26,7 +26,7 @@ generated quantities {
   vector[N] log_weight_rep; // replications from posterior predictive dist
 
   for (n in 1:N) {
-    real log_weight_hat_n = beta[1] + beta[2] * log_gest[n] + beta[3] * preterm[n] + beta[4] *preterm[n] * log_gest[n];
+    real log_weight_hat_n = beta[1] + beta[2] * log_gest[n] + beta[3] * preterm[n] + beta[4] * inter[n];
     log_lik[n] = normal_lpdf(log_weight[n] | log_weight_hat_n, sigma);
     log_weight_rep[n] = normal_rng(log_weight_hat_n, sigma);
   }

@@ -98,6 +98,7 @@ library(rstan)
 library(bayesplot)
 library(tidybayes) 
 
+
 fit1 <- stan(data = stan_data,
              file = here("code/models/theta_same.stan"),
              iter = 1000,
@@ -167,8 +168,42 @@ plot_data <- tibble(mod1_theta = exp(theta_mod1), mod2_theta = exp(thetas_mod2),
 ```{r plots}
 
 plot_data %>%
-  ggplot(aes(x = smr, y = mod1_theta)) +
-  geom_point()
+  pivot_longer(cols = starts_with("mod"),
+               names_to = "model",
+               values_to = "theta") %>%
+  mutate(model = str_sub(model, end = 4)) %>%
+  ggplot(aes(x = smr, y = theta, color = model)) +
+  geom_point(alpha = 0.6) +
+  geom_abline(slope = 1, intercept = 0) +
+  theme_bw() +
+  labs(title = "Predicted Theta vs observed SMR for the three models")
 
+```
+
+```{r plots2 ,fig.height=8}
+thetas_1 <- spread_draws(fit1, alpha) %>% mutate(theta = exp(alpha)) %>% select(-alpha)
+thetas_2 <- spread_draws(fit2, log_theta[i]) %>% mutate(theta = exp(log_theta)) %>% select(-log_theta)
+thetas_3 <- spread_draws(fit3, log_theta[i]) %>% mutate(theta = exp(log_theta)) %>% select(-log_theta)
+
+thetas_2 %>%
+  median_qi(.width = 0.95) %>%
+  ggplot(aes(x = i, y = theta)) +
+  geom_pointinterval() +
+  theme_bw() +
+  labs(title = "Estimated Thetas by region from model 2")
+
+thetas_3 %>%
+  median_qi(.width = 0.95) %>%
+  ggplot(aes(x = i, y = theta)) +
+  geom_pointinterval() +
+  theme_bw() +
+  labs(title = "Estimated Thetas by region from model 3")
+
+thetas_1 %>%
+  median_qi(.width = 0.95) %>%
+  ggplot(aes(x = i, y = theta)) +
+  geom_pointinterval() +
+  theme_bw() +
+  labs(title = "Estimated Theta by region from model 1")
 ```
 

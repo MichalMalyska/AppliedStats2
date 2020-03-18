@@ -1,0 +1,570 @@
+---
+title: "Assignment 3"
+author: "Michal Malyska"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+library(arm)
+set.seed(1337)
+```
+
+
+# Question 1
+
+## a) This is just a normal-normal conjugate distribution pair so we have:
+
+$$ 
+p(\mu | y) \propto p(y|\mu) p(\mu) \sim N(\mu_{post}, \sigma^2_{post})
+$$
+
+Where:
+
+$$
+\mu_{post} = \sigma^2_{post} \left( \frac{\mu_0}{\sigma^2_0} + \frac{n\bar{Y}}{\sigma^2} \right)
+$$
+
+and
+
+$$
+\sigma^2_{post} = \left( \frac{1}{\sigma^2_0} + \frac{n}{\sigma^2} \right)^{-1}
+$$
+
+in our case $n = 10$, $\mu_0 = 100$, $\bar{Y} = 113$, $\sigma_0 = \sigma = 15$
+which gives:
+
+$$
+\sigma^2_{post} = \left( \frac{1}{15^2} + \frac{10}{15^2} \right)^{-1} = 20.45
+$$
+
+$$
+\mu_{post} = 20.45  \left( \frac{100}{15^2} + \frac{1130}{15^2} \right) = 111.82
+$$
+
+This will obviously also be the expected value of $\mu_{post}$ and hence the
+Bayesian point estimate (same with median so it doesn't matter which one we take).
+The credible intervals will be just the corresponding quantiles of the
+normal distribution:
+
+```{r normal quantiles}
+sigmasq_post <- 1 / (11 / 15^2)
+sigma_post <- sqrt(sigmasq_post)
+print(paste0("Posterior Variance is : ", sigmasq_post))
+mu_post <- sigmasq_post * (1230 / 15^2)
+print(paste0("Posterior Mean is : ", mu_post))
+
+cr_interv_lower <- qnorm(p = 0.025, mean = mu_post, sd = sigma_post)
+cr_interv_upper <- qnorm(p = 0.975, mean = mu_post, sd = sigma_post)
+
+print(paste0("The credible for posterior mean is: [", cr_interv_lower, ",", cr_interv_upper , "]"))
+
+```
+
+## b
+
+$$
+\mathbb{E}\left( (\hat{\mu} - \mu^*)^2 |\mu^* \right) = \mathbb{E}\left( (\hat{\mu}^2 - 2\hat{\mu}\mu^* + \mu^{*2}) |\mu^* \right) = \mathbb{E}\left( \hat{\mu}^2 |\mu^* \right) + \mathbb{E}\left(  - 2\hat{\mu}\mu^* + \mu^{*2} |\mu^* \right) \\
+= \mathbb{V}ar(\hat{\mu}^2 |\mu^*) + \left[ \mathbb{E}(\hat{\mu} |\mu^*) \right]^2 + \mathbb{E}\left(  - 2\hat{\mu}\mu^* + \mu^{*2} |\mu^* \right) = \mathbb{V}ar(\hat{\mu}^2 |\mu^*) + \left[ \mathbb{E}(\hat{\mu} |\mu^*) \right]^2 -2\mu^*\mathbb{E}(\hat{\mu} |\mu^*) + \mu^{*2} \\
+= \mathbb{V}ar(\hat{\mu}^2 |\mu^*) + [bias(\hat{\mu} | \mu^{*})]^2
+$$
+
+or just by noting that $\hat{\mu} | \mu^* \perp \mu^*$ from which it directly follows.
+
+## c
+Assuming $\mu^* = 112$
+
+$Bias_B = 111.82 - 112 = 0.18$
+$Bias_{MLE} = 113 - 112 = 1$
+
+$$ \mathbb{V}ar_{B} = \mathbb{V}ar(\mu_{post}) = \frac{n^2 \sigma_0^4}{(\sigma^2 + n \sigma_0^2)^2} \mathbb{V}ar(\bar{Y}) = \frac{100 * 15^4}{(15^2 + 10* 15^2)^2} \mathbb{V}ar_{MLE} = 0.82644
+\mathbb{V}ar_{MLE} $$
+
+$\mathbb{V}ar_{MLE} = \mathbb{V}ar(\bar{Y}) = \frac{\sigma^2}{n} = \frac{15^2}{10} = 22.5$
+
+$MSE_B =  0.18^2 + 0.82644*22.5 = 18.6273$
+
+$MSE_{MLE} = 1 +  22.5 = 23.5$
+
+MLE has a larger bias and a larger variance thus a larger MSE.
+
+## d
+
+Both are normal with the means and variances as above
+
+```{r Sampling Distributions}
+mle_mean <- 113
+mle_var <- 22.5
+bayes_mean <- mu_post
+bayes_var <- (100 * 15^4) / (11 * 15^2)^2 * mle_var
+
+x_s <- seq(from = 100, to = 130, by = 0.05)
+bayes_samples <- dnorm(x_s, mean = bayes_mean, sd = sqrt(bayes_var))
+mle_samples <- dnorm(x_s, mean = mle_mean, sd = sqrt(mle_var))
+
+df_sampling_plot <- tibble(x = x_s, bayes = bayes_samples, mle = mle_samples)
+
+df_sampling_plot %>%
+	pivot_longer(cols = c("bayes","mle"), names_to = "type", values_to = "density") %>%
+	ggplot(aes(x = x, y = density, fill = type)) +
+	scale_fill_brewer(palette = "Set1") + 
+	geom_area(alpha = 0.8) +
+	theme_bw() +
+	geom_vline(xintercept = 112, color = "black") +
+	labs(title = "Sampling densities by type", 
+		 subtitle = "Real mean in black")
+```
+
+The MLE is in principle an unbiased estimator, but has higher variance. If we
+can put an informative prior from reliable information the Bayes estimator
+will have lower variance, and as in this case, could in practice have lower
+bias as well. All in all Bayes estimator with good prior should have a lower
+MSE than the ML estimator. 
+
+```{r Plots for different values of n}
+
+for (n in c(50, 100, 500)) {
+mle_mean <- 113
+mle_var <- (15^2) / n
+bayes_var <- (n^2 * 15^4) / ((n + 1) * 15^2)^2 * mle_var
+bayes_mean <- ((100 + 113 * n) / 15^2) * bayes_var
+
+x_s <- seq(from = 100, to = 130, by = 0.05)
+bayes_samples <- dnorm(x_s, mean = bayes_mean, sd = sqrt(bayes_var))
+mle_samples <- dnorm(x_s, mean = mle_mean, sd = sqrt(mle_var))
+
+df_sampling_plot <- tibble(x = x_s, bayes = bayes_samples, mle = mle_samples)
+
+df_sampling_plot %>%
+	pivot_longer(cols = c("bayes","mle"), names_to = "type", values_to = "density") %>%
+	ggplot(aes(x = x, y = density, fill = type)) +
+	scale_fill_brewer(palette = "Set1") + 
+	geom_area(alpha = 0.8) +
+	theme_bw() +
+	geom_vline(xintercept = 112, color = "black") +
+	labs(title = paste0("Sampling densities by type for n = ", n), 
+		 subtitle = "Real mean in black") -> p
+print(p)
+}
+```
+
+From the plots with varying n we see that both distributions get tighter around
+the observed data mean values, but the bayesian posterior is skewed by the prior,
+especially for lower n. 
+
+# Question 2
+
+## a
+
+The proposal is just a draw from the conditional distribution
+$$
+J_t(\theta_j | \theta_{-j}^{s-1}) = p(\theta_j | \theta_{-j}^{s-1})
+$$
+
+As for $r = 1$ this is easy to see since we are already drawing from the conditional
+distribution, thus the normalizing constants are the same (since they depend
+on all components but the one we are changing). Thus it looks something like:
+
+$$
+r = \frac{p(\theta^s)}{p(\theta^{s-1})} * \frac{J_t(\theta_j^{s-1} | \theta_{-j}^{s})}{J_t(\theta_j^s | \theta_{-j}^{s-1})} = \frac{p(\theta^s)}{p(\theta^{s-1})} \frac{p(\theta_j^{s-1} | \theta_{-j}^{s-1})}{p(\theta_j^s | \theta_{-j}^{s-1})} = \frac{p(\theta^s)}{p(\theta^{s-1})} \frac{p(\theta_j^{s-1})}{p(\theta_j^s)} \frac{C(\theta_{-j}^{s-1})}{C(\theta_{-j}^{s})} = 1
+$$
+
+intuitively since we are in the stationary distribution and we take a step
+in the conditional distribution then we will tay in the stationary distribution
+so always accept.
+
+## b
+
+```{r Gibbs}
+compute_mu_mean <- function(sigmasq) {
+	top <- (100 / 15^2) + (1130 / sigmasq)
+	bottom <- (1/15^2) + (10 / sigmasq)
+	return(top/bottom)
+}
+
+compute_mu_var <- function(sigmasq) {
+	bottom <- (1/15^2) + (10/sigmasq)
+	return(1/bottom)
+}
+
+sigma_a <- 11/2
+
+compute_sigma_b <- function(mu) {
+	return(0.5 * (15 + 9 * 13^2 + 10 * (113 - mu)^2))
+}
+
+sample_mu <- function(sigmasq) {
+	mu_mean <- compute_mu_mean(sigmasq)
+	mu_var <- compute_mu_var(sigmasq)
+	return(rnorm(1, mean = mu_mean, sd = sqrt(mu_var)))
+}
+
+sample_sigma <- function(mu) {
+	sigma_b <- compute_sigma_b(mu)
+	prec_sq <- rgamma(1, shape = sigma_a, rate = sigma_b)
+	return(1/prec_sq)
+}
+
+sample_mean <- 113
+sample_var <- 13^2
+
+mu_post <- rep(NA, 1000)
+sigmasq_post <- rep(NA, 1000)
+
+mu_post[1] <- sample_mean
+sigmasq_post[1] <- sample_var
+
+for (i in 2:1000) {
+	mu_post[i] <- sample_mu(sigmasq_post[i - 1])
+	sigmasq_post[i] <- sample_sigma(mu_post[i])
+}
+```
+
+```{r Gibbs Plots}
+
+posterior_samples <- tibble(idx = 1:1000, mu_post = mu_post, sigma_post = sqrt(sigmasq_post))
+
+posterior_samples %>%
+	pivot_longer(cols = contains("_post"), names_to = "parameter") %>%
+	ggplot(aes(x = idx, y = value, facet = parameter)) +
+	geom_path() +
+	facet_grid(parameter ~ ., scales = "free") +
+	theme_bw() +
+	labs(title = "Posterior distribution traceplots")
+
+posterior_samples %>%
+	pivot_longer(cols = contains("_post"), names_to = "parameter") %>%
+	ggplot(aes(x = value, facet = parameter)) +
+	geom_histogram(bins = 100) +
+	facet_grid(. ~ parameter, scales = "free") +
+	theme_bw() +
+	labs(title = "Posterior distribution histograms")
+
+posterior_samples %>% summarise(mu_ci_lower = quantile(mu_post, 0.025),
+								mu_post_pe = mean(mu_post),
+								mu_ci_upper = quantile(mu_post, 0.975),
+								sigma_ci_lower = quantile(sigma_post, 0.025),
+								sigma_post_pe = mean(sigma_post),
+								sigma_ci_upper = quantile(sigma_post, 0.975),) %>% t() %>%
+	kableExtra::kable()
+
+
+
+```
+
+# Question 3
+
+```{r load data}
+df <- read_delim(url("http://www.stat.columbia.edu/~gelman/arm/examples/arsenic/wells.dat"),delim = " ",col_names = c("id", "switch", "arsenic", "dist", "assoc", "educ"), skip = 1)
+```
+
+## a)
+
+```{r EDA1}
+
+# Distance vs Switch
+df %>%
+	mutate(switch = as_factor(if_else(switch == 0, "Didn't Switch", "Switched"))) %>%
+	ggplot(aes(x = dist, facet = switch, ..density..)) +
+	geom_histogram(bins = 100, fill = "black", alpha = 0.3) +
+	geom_density(fill = "red", alpha = 0.3) +
+	facet_grid(switch ~ ., scales = "free_y") +
+	theme_bw() +
+	labs(title = "Histogram of Distances facetted by whether family switched wells")
+
+```
+
+There does not seem to be that much of a difference in distanced between
+people who switched the wells and those who did not
+
+```{r EDA2}
+df %>%
+	mutate(switch = as_factor(if_else(switch == 0, "Didn't Switch", "Switched"))) %>%
+	ggplot(aes(x = arsenic, facet = switch, ..density..)) +
+	geom_histogram(bins = 100, fill = "black", alpha = 0.3) +
+	geom_density(fill = "red", alpha = 0.3) +
+	facet_grid(switch ~ ., scales = "free_y") +
+	theme_bw() +
+	labs(title = "Histogram of levels of arsenic facetted by whether family switched wells")
+```
+
+There is a very clear diffference - people with higher levels of arsenic in their
+wells seem to be much more willing to switch, most of the people who did not switch
+seem to have had a well that was close to the "safe" level of 0.5
+
+```{r EDA3}
+df %>%
+	mutate(switch = as_factor(if_else(switch == 0, "Didn't Switch", "Switched"))) %>%
+	ggplot(aes(x = arsenic, y = dist, color = switch)) +
+	geom_point(alpha = 0.75) +
+	theme_bw() +
+	geom_smooth(method = "lm") +
+	scale_color_brewer(palette = "Set1") + 
+	labs(title = "Distance to the next well vs level of arsenic of the current well",
+		 subtitle = "Colored by whether family switched wells, and added trend lines")
+```
+
+There seems to be a difference in a relationship between distance and arsenic
+level for people that switched - this makes sense as people with very 
+high arsenic level might want to switch regardless of distance, while people with
+much lower arsenic level might not want to switch to a well that is very far.
+The lines clearly have quite different slopes, which would indicate this effect.
+
+```{r EDA4}
+
+df %>%
+	mutate(switch = as_factor(if_else(switch == 0, "Didn't Switch", "Switched"))) %>%
+	ggplot(aes(x = log(arsenic), y = dist, color = switch)) +
+	geom_point(alpha = 0.75) +
+	theme_bw() +
+	geom_smooth(method = "lm") +
+	scale_color_brewer(palette = "Set1") + 
+	labs(title = "Distance to the next well vs log level of arsenic of the current well",
+		 subtitle = "Colored by whether family switched wells, and added trend lines")
+```
+
+Similar to the plot above just trying to see if perhaps there will be more clear of a trend
+with looking at log arsenic level, and there doesn't seem to be that much more compared
+to the dist vs arsenic. The slopes are ver clearly different, but there are 
+too many high distance observations for switched for even lower arsenic levels
+to make the difference in slopes extremely pronounced.
+
+```{r EDA5}
+
+df %>%
+	mutate(switch = as_factor(if_else(switch == 0, "Didn't Switch", "Switched"))) %>%
+	ggplot(aes(x = log(arsenic), y = log(dist), color = switch)) +
+	geom_point(alpha = 0.75) +
+	theme_bw() +
+	geom_smooth(method = "lm") +
+	scale_color_brewer(palette = "Set1") + 
+	labs(title = " log Distance to the next well vs log level of arsenic of the current well",
+		 subtitle = "Colored by whether family switched wells, and added trend lines")
+
+```
+
+Putting both on the log scale also does not show much change compared to the previoius
+ones.
+
+## b)
+
+```{r StanData}
+
+# Standardize the variables:
+scale2 <- function(x, na.rm = FALSE) (x - mean(x, na.rm = na.rm))
+
+
+df_stan <- df %>% mutate(d = scale2(dist),
+						 a = scale2(arsenic),
+						 da = d * a,
+						 loga = scale2(log(arsenic)),
+						 dloga = d*loga,
+						 y = switch)
+N = nrow(df_stan)
+
+# Make Stan Data format
+stan_data <- list(
+	N = N,
+	a = df_stan$a,
+	d = df_stan$d,
+	da = df_stan$da,
+	loga = df_stan$loga,
+	dloga = df_stan$dloga,
+	y = df_stan$y
+)
+```
+
+```{r Fit model 1}
+library(rstan)
+library(tidybayes)
+library(bayesplot)
+library(loo)
+
+# fit model 1
+model1 <- stan(file = here("Assignments/Assignment 3/model1.stan"),
+			   data = stan_data,
+			   chains = 4,
+			   iter = 1000)
+
+# fit model 2
+model2 <- stan(file = here("Assignments/Assignment 3/model2.stan"),
+			   data = stan_data,
+			   chains = 4,
+			   iter = 1000)
+
+```
+
+coefficient interpretations:
+
+$\beta_0:$ The intercept - The log odds of a family switching the well if their distance and arsenic levels are average
+$\beta_1:$ Coefficient for distance - The change in log odds as the distance changes from the average 
+$\beta_2:$ Coefficient for arsenic level - The change in log odds as the arsenic level changes from the average
+$\beta_3:$ Coefficient for the interaction - The change in the change in log odds with distance with arsenic level from the average
+
+
+```{r Model Summaries}
+
+summary(model1)$summary[c("beta0", "beta1", "beta2", "beta3"),]
+summary(model2)$summary[c("beta0", "beta1", "beta2", "beta3"),]
+
+```
+
+Rhats and n_eff look pretty good so I won't make the chains longer. 
+
+## c
+
+```{r yreps}
+
+ty_id <- df %>% filter(arsenic < 0.82) %>% pull(id)
+
+# Compute t(y)
+ty <- df %>% slice(ty_id) %>% summarise(mean(switch)) %>% pull()
+
+yrep1 <- extract(model1)[["y_rep"]] %>% t() %>% as_tibble()
+yrep2 <- extract(model2)[["y_rep"]] %>% t() %>% as_tibble()
+
+ty_rep1 <- yrep1 %>% slice(ty_id) %>% summarise_all(mean) %>% t()
+ty_rep1 <- ty_rep1[,1] %>% as_vector() %>% unname()
+
+ty_rep2 <- yrep2 %>% slice(ty_id) %>% summarise_all(mean) %>% t()
+ty_rep2 <- ty_rep2[,1] %>% as_vector() %>% unname()
+```
+
+```{r calcs}
+
+df_tyreps <- tibble(model1 = ty_rep1, model2 = ty_rep2)
+
+df_tyreps %>%
+	pivot_longer(cols = everything(), names_to = "model", values_to = "tyrep") %>%
+	mutate(model = as_factor(model)) %>%
+	ggplot(aes(x = tyrep)) +
+	geom_histogram(bins = 50, fill = "black") +
+	geom_vline(xintercept = ty, color = "red") +
+	facet_wrap(.~model) +
+	theme_bw() +
+	labs(title = "Histograms of t(y_rep) for the two models with observed t(y) in red")
+
+df_tyreps %>%
+	pivot_longer(cols = everything(), names_to = "model", values_to = "tyrep") %>%
+	mutate(model = as_factor(model)) %>%
+	group_by(model) %>%
+	summarise(prob = mean(tyrep < ty)) %>%
+	kableExtra::kable()
+```
+For both models the probabilities are low, but for model 1 it is significantly lower
+than for model 2. This means that both models vastly overestimate the proportion 
+of people with wells with arsenic levels under 0.82 that will switch. 
+
+## d
+
+```{r LOOOOOOOOOOOO}
+
+log_lik_1 <- extract_log_lik(model1)
+log_lik_2 <- extract_log_lik(model2)
+
+
+loo1 <- loo(log_lik_1, save_psis = TRUE)
+loo2 <- loo(log_lik_2, save_psis = TRUE)
+
+comp <- loo_compare(loo1, loo2)
+print(comp)
+```
+
+We see that the second model is better (higher elpd).
+
+## e)
+
+```{r ELPD}
+
+df_elpd_plots <- tibble(model1 = loo1$pointwise[,1], model2 = loo2$pointwise[,1], loga = log(df$arsenic), switched = as_factor(df$switch))
+
+df_elpd_plots <- df_elpd_plots %>%
+	mutate(diff = model1 - model2)
+
+df_elpd_plots %>%
+	ggplot(aes(x = model1, y = model2, color = switched)) +
+	geom_point(alpha = 0.5) +
+	scale_color_brewer(palette = "Set1") + 
+	theme_bw() +
+	scale_x_continuous(name = "Model 1 ELPD", limits = c(-2,0)) +
+	scale_y_continuous(name = "Model 2 ELPD", limits = c(-2,0)) +
+	labs(title = "Model 1 vs Model 2 ELPDs")
+
+df_elpd_plots %>%
+	ggplot(aes(x = loga, y = diff, color = switched)) +
+	geom_point(alpha = 0.5) +
+	scale_color_brewer(palette = "Set1") + 
+	theme_bw() +
+	scale_x_continuous(name = "log(arsenic)") +
+	scale_y_continuous(name = "Model1 ELPD - Model2 ELPD") +
+	labs(title = "Difference in ELPDs by log Arsenic")
+
+```
+
+interpretations:
+
+I cut off 10 points for the first plot to make it much more readable, it seems
+that there is some mild pattern for both models - for non-switched both 
+have on average lower ELPD and for switched both have higher. There is some
+convolved pattern around where the two start mixing but nothing I would be 
+comfortable talking about since it looks like a blob. 
+
+For the second plot it's clear that for low and high values of log arsenic
+model 1 performs better for switched and worse for non-switched, and 
+in the middle the opposite - model 2 is better for switched and worse for non-switched.
+
+## f
+
+$elpd_{loo} = log(p(y_i | y_{-i}))$
+
+$exp(elpd_{loo}) =  p(y_i | y_{-i})$
+
+For a single $elpd_{loo}$ it seems to be the
+probabilty that the model prediction is correct.
+So it's the probability of the model predicting $y = 0$ when
+it there was no well switch, and predicting 1 when there was.
+
+## g
+
+```{r ELPD recodes}
+# Model 1
+
+df_elpd_mod1 <- df_elpd_plots %>%
+	dplyr::select(-model2) %>%
+	mutate(model1 = case_when(
+		switched == 1 ~ exp(model1),
+		switched != 1 ~ 1-exp(model1)),
+		switched = as.numeric(as.character(switched)),
+		resid = switched - model1,
+		a = exp(loga))
+
+arm::binnedplot(x = df_elpd_mod1$a,
+				y = df_elpd_mod1$resid,
+				nclass = 40,
+				xlab = "Arsenic Levels",
+				main = "Binned residual plot for Model 1")
+
+# Model 2
+df_elpd_mod2 <- df_elpd_plots %>%
+	dplyr::select(-model1) %>%
+	mutate(model2 = case_when(
+		switched == 1 ~ exp(model2),
+		switched != 1 ~ 1-exp(model2)),
+		switched = as.numeric(as.character(switched)),
+		resid = switched - model2)
+
+arm::binnedplot(x = df_elpd_mod2$loga,
+				y = df_elpd_mod2$resid,
+				nclass = 40,
+				xlab = "log(Arsenic) Levels",
+				main = "Binned residual plot for Model 2")
+
+```
+
+Both binned residual plots look very similar and don't show much in terms of
+trend except for the two observations with very low arsenic levels that have
+much more negative residuals than the rest. The other residuals seem
+to behave quite well for both models: centered around zero, no obvious patterns
+etc. Overall, pretty good.

@@ -1,0 +1,643 @@
+---
+title: "Final Exam Questions 3 and 4"
+author: "Michal Malyska"
+date: "11/04/2020"
+output: pdf_document
+---
+
+```{r setup}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	cache = TRUE
+)
+
+library(tidyverse)
+library(lubridate)
+library(here)
+library(corrr)
+library(rstan)
+options(mc.cores = parallel::detectCores())
+library(tidybayes)
+library(tidyposterior)
+library(loo)
+library(bayesplot)
+
+theme_set(theme_bw())
+```
+
+# Question 3
+
+
+
+```{r Q3 load Data}
+# Delete all the things
+rm(list = ls())
+
+# Load data 
+airbnb <- read_csv("~/Desktop/University/Grad School/Classes/STA2201 - Applied Statistics/applied-stats/data/airbnb.csv")
+
+df <- airbnb %>%
+	mutate(price = str_remove(price, "\\$"),
+		   price = str_remove(price, ","),
+		   price = as.integer(price))
+```
+
+
+## a) EDA and Data Cleaning
+
+First let's take a look at how many observations of each variable are missing:
+
+```{r Missing summary}
+
+missing_summary <- df %>% summarize_all(list(perc_missing = function(x) 100 * mean(is.na(x)))) %>%
+	pivot_longer(cols = everything(), values_to = "percent_missing", names_to = "column") %>%
+	mutate(column = str_remove(string = column, pattern = "_perc_missing")) %>%
+	arrange(desc(percent_missing))
+
+kableExtra::kable(missing_summary)
+
+df <- df %>% select(-square_feet, -has_availability)
+```
+
+I feel comfortable removing square_feet since it is pretty empty anyway.
+I also remove has_availability since it's all constant
+
+I also see that the host_since and similarily named columns have the same %
+of missing values which suggests that it's probably all missing or none missing.
+
+Making sure:
+
+```{r host missing vars}
+df %>%
+	filter(is.na(host_since)) %>%
+	select_at(vars(starts_with("host_"))) %>%
+	summarize_all(list(perc_missing = function(x) 100 * mean(is.na(x)))) %>%
+	pivot_longer(cols = everything(), values_to = "percent_missing", names_to = "column") %>%
+	mutate(column = str_remove(string = column, pattern = "_perc_missing")) %>%
+	arrange(desc(percent_missing))
+
+df %>%
+	filter(!is.na(host_since)) %>%
+	select_at(vars(starts_with("host_"))) %>%
+	summarize_all(list(perc_missing = function(x) 100 * mean(is.na(x)))) %>%
+	pivot_longer(cols = everything(), values_to = "percent_missing", names_to = "column") %>%
+	mutate(column = str_remove(string = column, pattern = "_perc_missing")) %>%
+	arrange(desc(percent_missing))
+```
+
+This confirms the suspicion that host_ variables that are not ID are all missing
+together.
+
+Now simiarily let's see about the review variables:
+
+```{r review missing vars}
+df %>%
+	filter(is.na(review_scores_rating)) %>%
+	select_at(vars(starts_with("review_"))) %>%
+	summarize_all(list(perc_missing = function(x) 100 * mean(is.na(x)))) %>%
+	pivot_longer(cols = everything(), values_to = "percent_missing", names_to = "column") %>%
+	mutate(column = str_remove(string = column, pattern = "_perc_missing")) %>%
+	arrange(desc(percent_missing))
+
+df %>%
+	filter(!is.na(review_scores_rating)) %>%
+	select_at(vars(starts_with("review_"))) %>%
+	summarize_all(list(perc_missing = function(x) 100 * mean(is.na(x)))) %>%
+	pivot_longer(cols = everything(), values_to = "percent_missing", names_to = "column") %>%
+	mutate(column = str_remove(string = column, pattern = "_perc_missing")) %>%
+	arrange(desc(percent_missing))
+```
+
+This shows that if review_scores_rating is missing so are the other reviews,
+but differently than before if it is not missing some of them still might be. 
+
+If I was to remove all the rows with missing host_since then this analysis would result in:
+
+```{r host since missing removed missing review}
+df %>%
+	filter(is.na(review_scores_rating), !is.na(host_since)) %>%
+	select_at(vars(starts_with("review_"))) %>%
+	summarize_all(list(perc_missing = function(x) 100 * mean(is.na(x)))) %>%
+	pivot_longer(cols = everything(), values_to = "percent_missing", names_to = "column") %>%
+	mutate(column = str_remove(string = column, pattern = "_perc_missing")) %>%
+	arrange(desc(percent_missing))
+
+df %>%
+	filter(!is.na(review_scores_rating), !is.na(host_since)) %>%
+	select_at(vars(starts_with("review_"))) %>%
+	summarize_all(list(perc_missing = function(x) 100 * mean(is.na(x)))) %>%
+	pivot_longer(cols = everything(), values_to = "percent_missing", names_to = "column") %>%
+	mutate(column = str_remove(string = column, pattern = "_perc_missing")) %>%
+	arrange(desc(percent_missing))
+```
+
+If I was to remove all observations with missing values from "host" and "review" 
+variables I would have:
+
+```{r all missing removed}
+
+df %>% select(contains("host"), contains("review")) %>%
+	filter_all(all_vars(!is.na(.))) %>%
+	nrow()
+
+
+```
+
+Which is not bad. In the case where I would remove all rows with missing data
+I would have:
+
+```{r all missing removed summary}
+
+df %>%
+	filter_all(all_vars(!is.na(.))) %>%
+	nrow()
+
+```
+
+which is also acceptable. Therefore I will proceed with eliminating all rows
+with missing observations of the other variables.
+
+```{r final data}
+
+df <- df %>%
+	filter_all(all_vars(!is.na(.)))
+
+```
+
+Note that I am treating the value of "N/A" in host_reponse_time as a valid
+value, since it means host was probably not asked a question. This is different
+than just having a missing value.
+
+Now I will convert the host_since to be a more meaningful variables - 
+number of years since they became a host (host_for_years)
+
+```{r convert all types}
+
+df <- df %>%
+	mutate(host_for_years = as.integer(as.duration(interval(ymd(host_since), ymd("2019-12-07"))  %/% as.duration(years(1))))) %>%
+	select(-host_since)
+
+```
+
+I also noticed that the values for host_listings_count and host_total_listings_count
+look very similar so I want to make sure they are different columns:
+
+```{r listings counts}
+
+nrow(df) != sum(df$host_listings_count == df$host_total_listings_count)
+
+```
+Which is false so we can remove the total listings count column
+
+```{r remove total listings}
+
+df <- df %>% select(-host_total_listings_count)
+
+```
+
+
+Finally, I can look at the values for all variables:
+
+```{r All histograms}
+
+
+varnames_numeric <- colnames(df %>% select_if(is.numeric) %>% select(-host_id))
+for (variable in seq_along(varnames_numeric)) {
+	plot <- ggplot(df, aes_string(varnames_numeric[variable])) +
+		geom_histogram(binwidth = function(x) max(2*IQR(x, na.rm = T) / (length(x)^(1/3)), 0.5)) +
+		ggtitle(paste(varnames_numeric[variable], "Histogram")) +
+		theme_minimal()
+	print(plot)
+}
+```
+
+We can see that all review variables have values around the maximum value
+with very few values far away from that, price has a havy right tail (no surprise 
+there), and so does number of reviews (again, no surprise) and number of listings. This means 
+I need to log transform the price and number of reviews and standardize the reviews.
+
+As for bathroom, and bedroom counts, I will roll them up to be factors with 
+values of 0, 1, 2+. Accomodates needs a bit more analysis.
+
+I also filter out price errors (no rentals are free).
+
+```{r numeric transformations}
+
+df <- df %>%
+	filter(price > 0) %>%
+	mutate(log_price = log(price),
+		   log_listings = log(host_listings_count),
+		   log_num_reviews = log(number_of_reviews)) %>%
+	select(-price, -host_listings_count, -number_of_reviews) %>%
+	mutate(
+		bathrooms = as_factor(case_when(
+			bathrooms == 0 ~ "0",
+			bathrooms <= 1 ~ "1",
+			bathrooms > 1 ~ "2+")),
+		bedrooms = as_factor(case_when(
+			bedrooms == 0 ~ "0",
+			bedrooms <= 1 ~ "1",
+			bedrooms > 1 ~ "2+"
+		))
+	) %>%
+	mutate_at(vars(starts_with("review")), ~as.numeric(scale(.)))
+```
+
+Now I want to see the value counts for our character variables:
+
+```{r characters / factors}
+
+charvars <- df %>% select_if(is.character) %>% select(-neighbourhood_cleansed) %>% colnames()
+for (variable in seq_along(charvars)) {
+	plot <- ggplot(df, aes_string(charvars[variable])) +
+		geom_bar() +
+		ggtitle(paste(charvars[variable], "Value Counts")) +
+		theme_minimal()
+	print(plot)
+}
+
+plot <- ggplot(df, aes(x = neighbourhood_cleansed)) +
+		geom_bar() +
+		ggtitle("neighbourhood_cleansed Value Counts") +
+		theme_minimal() +
+		theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 4))
+print(plot)
+
+```
+
+The cleansed locations variable has a lot of possible locations (enough to 
+mess with the x-axis labels and make them practically unreadable), some of
+which have pretty low value counts. Similarily with some of the values for the
+host_response_time (a few days or more) and room_type (Hotel room and Shared room)
+
+To ensure the model works well with those I will lump them into an other 
+category until there is at least 100 observations.
+
+```{r factors}
+
+df <- df %>% mutate_if(is.character, ~as_factor(.)) %>%
+	mutate_if(is.factor, ~fct_lump_min(., min = 100))
+
+charvars <- df %>% select_if(is.factor) %>% colnames()
+for (variable in seq_along(charvars)) {
+	plot <- ggplot(df, aes_string(charvars[variable])) +
+		geom_bar() +
+		ggtitle(paste(charvars[variable], "Value Counts")) +
+		theme_minimal() +
+		theme(axis.text.x = element_text(angle = 90, hjust = 1))
+	print(plot)
+}
+```
+
+Now that the data is ready, it's time to explore the associations between
+the log price and the potential explanatory variables.
+
+First scatterplots of all numeric variables with trend lines:
+
+```{r EDA part 2}
+
+varnames_numeric <- colnames(df %>% select_if(is.numeric) %>% select(-host_id, -log_price))
+for (variable in seq_along(varnames_numeric)) {
+	plot <- ggplot(df, aes_string(x = varnames_numeric[variable])) +
+		aes(y = log_price) +
+		geom_point() +
+		geom_smooth(method = "lm") +
+		ggtitle(paste("Scatterplot of ", varnames_numeric[variable], "vs log_price")) +
+		theme_minimal()
+	print(plot)
+}
+
+```
+
+Seems like log listings and log num reviews are out, accommodates, review_scores_rating,
+review_scores_accuracy, review_scores_cleanliness and review_scores_location are in.
+
+as for factor variables:
+
+```{r scatterplots factors}
+
+charvars <- df %>% select_if(is.factor) %>% colnames()
+for (variable in seq_along(charvars)) {
+	plot <- ggplot(df, aes_string(x = charvars[variable])) +
+		aes(y = log_price) +
+		geom_point() +
+		geom_smooth(method = "lm") +
+		ggtitle(paste("Scatterplot of ", charvars[variable], "vs log_price")) +
+		theme_minimal()
+	print(plot)
+}
+```
+
+I would include bedrooms, bathrooms, room_type, and neighbourhood_cleansed but
+exclude the response time.
+
+Final variables are:
+
+```{r final modelling variables}
+
+df_model <- df %>%
+	select(bedrooms, bathrooms, room_type, neighbourhood_cleansed, log_price, accommodates, review_scores_rating, review_scores_accuracy, review_scores_cleanliness, review_scores_location) %>%
+	sample_frac(size = 0.1)
+
+```
+
+
+
+## b)
+
+Since I am not at all bound by my EDA I want to propose some simple models to
+start and if need be I will add more variates. 
+
+First model will be very simple: log(price) as a function of accommodates, and 
+all the review scores. 
+
+Second model will be an even simpler model using just accomodates and the
+main review rating. 
+
+```{r stan data}
+
+X <- model.matrix(~ accommodates + review_scores_rating, df_model)
+
+stan_data <- list(
+	N = nrow(df_model),
+	P = ncol(X),
+	y = df_model$log_price,
+	X = X
+)
+
+mod2 <- stan(file = here::here("code/models/exam_Q3_M1.stan"),
+			 data = stan_data,
+             iter = 1000,
+             seed = 2718)
+
+X <- model.matrix(~ accommodates +
+				  	review_scores_rating +
+				  	review_scores_accuracy +
+				  	review_scores_cleanliness +
+				  	review_scores_location, df_model)
+
+stan_data <- list(
+	N = nrow(df_model),
+	P = ncol(X),
+	y = df_model$log_price,
+	X = X
+)
+
+mod1 <- stan(file = here::here("code/models/exam_Q3_M1.stan"),
+			 data = stan_data,
+             iter = 1000,
+             seed = 2718)
+
+```
+
+### Traceplots:
+
+```{r Traceplots model2}
+
+traceplot(mod2)
+
+```
+
+```{r Traceplots model1}
+
+traceplot(mod1)
+
+```
+
+All traceplots look alright
+
+### Summaries
+
+```{r summary mod2}
+
+summary(mod2)$summary[c("sigma", "beta[1]", "beta[2]", "beta[3]"),]
+	
+```
+
+```{r summary mod1}
+summary(mod1)$summary[c("sigma", "beta[1]", "beta[2]", "beta[3]", "beta[4]", "beta[5]", "beta[6]"),]
+```
+
+## c)
+
+```{r Loo comparison of models}
+
+log_lik_mod2 <- extract_log_lik(mod2, merge_chains = FALSE)
+log_lik_mod1 <- extract_log_lik(mod1, merge_chains = FALSE)
+r_eff_1 <- relative_eff(exp(log_lik_mod1)) 
+r_eff_2 <- relative_eff(exp(log_lik_mod2)) 
+
+loo_1 <- loo(log_lik_mod1, r_eff = r_eff_1, save_psis = TRUE)
+loo_2 <- loo(log_lik_mod2, r_eff = r_eff_2, save_psis = TRUE)
+
+
+comp <- loo_compare(loo_1, loo_2)
+print(comp)
+```
+
+Hence model 1 is preferred. 
+
+## d) Discussion of model 1:
+
+First of all, model 1 has more variables than model 2. Since that is the case
+we can make the conclusion that the three added ratings are predictive of 
+log price. The directions of betas for all of them make sense (price should 
+increase with ratings on location, accuracy, and cleanliness)
+
+First let's do a predictive posterior check and see what the simulated values
+look like vs what we observed:
+
+```{r model 1 PPC}
+
+y <- df_model$log_price
+yrep1 <- extract(mod1)[["y_rep"]]
+samp100 <- sample(nrow(yrep1), 100)
+ppc_dens_overlay(y, yrep1[samp100, ]) +
+	ggtitle("Posterior Predictive Distribution of log_price") +
+	labs(subtitle = "Y - observed, Yrep - replicated")
+
+```
+
+It looks quite good, except for maybe the lack of a bump around y = 7
+
+Next, I would want to see the PIT histogram
+
+```{r PIT Hist}
+
+ppc_loo_pit_overlay(yrep = yrep1, y = y, lw = weights(loo_1$psis_object)) +
+	ggtitle("Leave-One-Out Probability Integral Transform for Model 1") +
+	labs(subtitle = "Comapred to 100 standard uniforms")
+
+```
+
+It looks quite good, so I am not too worried about the model itself.
+
+One last check would be to try and do a predictive posterior check with a useful
+test statistic like a median.
+
+```{r median PPC}
+
+ppc_stat(y, yrep1, stat = "median") +
+	ggtitle("Posterior Predictive Check for Model 1 log price") +
+	labs(subtitle = "histogram of medians in replications, real median in dark blue")
+
+```
+
+It seems that we tend to overestimate the log price, but not by that much. 
+
+So now I would want to take a look at the actual coefficient numbers and estimates.
+First means and medians of each of the variables:
+
+```{r Model 1 numbers}
+
+summary(mod1)$summary[c("sigma", "beta[1]", "beta[2]", "beta[3]", "beta[4]", "beta[5]", "beta[6]"), c("mean", "50%")] %>% kableExtra::kable()
+
+```
+
+This means that the intercept is quite high and log price increases with 
+values of accommodates, main review rating, cleanliness, and location. 
+It decreases with accuracy rating, however the effect sizes are quite low in either
+case. From looking at the means and medians it's also clear that the posteriors
+don't have heavy tails since the values are quite similar. 
+
+The small effect sizes seem to be consistent with the scatter plots produced during
+EDA. The interpretation of each of the betas from 3-6 is that increasing the 
+corresponding ratings by one standard deviation results in an increas of log
+price by the corresponding value. beta 1 is the intercept, and beta 2 corresponds
+to increasing the number of people an appartment accomodates by 1.
+
+## e)
+
+Computing RMSE and RMSE by room type
+
+```{r predictions}
+df_train <- df_model %>%
+	mutate(train = sample(c(0,1), size = nrow(df_model), replace = TRUE, prob = c(0.2, 0.8)))
+
+df_test <- df_train %>%
+	filter(train == 0)
+df_train <- df_train %>%
+	filter(train == 1)
+
+X <- model.matrix(~ accommodates +
+				  	review_scores_rating +
+				  	review_scores_accuracy +
+				  	review_scores_cleanliness +
+				  	review_scores_location, df_train)
+
+stan_data <- list(
+	N = nrow(df_train),
+	P = ncol(X),
+	y = df_train$log_price,
+	X = X
+)
+
+mod_pred <- stan(file = here::here("code/models/exam_Q3_M2.stan"),
+			 data = stan_data,
+             iter = 1000,
+             seed = 2718)
+
+betas <-	mod_pred %>%
+	spread_draws(beta[i]) %>%
+	median_qi() %>%
+	select(i, beta) %>%
+	pivot_wider(names_from = i, names_prefix = "beta_", values_from = beta) %>%
+	t()
+
+df_test <- df_test %>%
+	mutate(pred = betas[1] + betas[2] * accommodates + betas[3] * review_scores_rating + betas[4] * review_scores_accuracy + betas[5] * review_scores_cleanliness + betas[6] * review_scores_location)
+
+preds <- df_test %>% 
+	mutate(sqerr = (log_price - pred)^2)
+
+preds  %>%
+	summarise(RMSE = sqrt(sum(sqerr) / n()),
+			  sd = sd(log_price)) %>%
+	kableExtra::kable()
+
+preds %>%
+	group_by(room_type) %>%
+	summarise(RMSE = sqrt(sum(sqerr) / n()),
+			  sd = sd(log_price)) %>%
+	kableExtra::kable()
+```
+
+The RMSE is higher for Shared rooms which seems reasonable given that there is
+ little data in that value (as per EDA), and given that SD of prices is higher.
+
+Overall the model does quite well with RMSE being lower than 1SD of log price.
+
+# Question 4
+
+## a) 
+
+Want to show that if survival times are exponential then gamma is a conjugate prior for the unknown hazard.
+
+We know that survival times are exponential, let's see what that says about
+the hazards:
+
+$$
+\begin{aligned}
+f(t) &= \lambda e^{(-\lambda t)} \implies S(t) = e^{-\lambda t} \\
+\lambda(t) &= \frac{f(t)}{S(t)} = \lambda
+\end{aligned}
+$$
+
+Constant hazards as expected. 
+
+We put a gamma prior on the hazard and look at the posterior.
+
+$$
+\begin{aligned}
+\lambda &\sim G(\alpha, \beta) \\
+p(\lambda) &= \frac{\beta^{alpha} \lambda^{\alpha - 1} e^{-\lambda \beta}}{\Gamma(\alpha)} \\
+L(t | \lambda) &= \lambda^n e^{-\lambda \sum_{i=1}^n(t)} \\
+p(\lambda | t) &\propto L(t|\lambda) p(\lambda) \\
+&\propto \lambda^n e^{-\lambda \sum_{i=1}^n(t)} \frac{\beta^{alpha} \lambda^{\alpha - 1} e^{-\lambda \beta}}{\Gamma(\alpha)} \\
+&\propto \lambda^{\alpha + n -1} e^{-\lambda(\beta + \sum_{i=1}^n(t))} \\
+&\propto G(\alpha+n, \beta + \sum_{i=1}^n(t))
+\end{aligned}
+$$
+
+## b)
+
+Since they are jointly normal and are correlated the density is:
+
+$$
+\begin{aligned}
+(y_1, y_2) \sim N(\mu, \Sigma) \\
+\Sigma = \begin{bmatrix} \sigma_1 & \sigma_1 \sigma_2 \rho \\
+\sigma_1 \sigma_2 \rho & \sigma_2
+\end{bmatrix}
+\end{aligned}
+$$
+
+Then obviously (sum of joint normals is normal):
+
+$$
+\bar{y} = \frac{y_1 + y_2}{2} \sim N(\mu, \frac{\sigma_{sum}^2}{4})
+$$
+
+All that is left is finding the value of $\sigma_{sum}$
+
+$$
+\begin{aligned}
+Var(X + Y) &= Var(X) + Var(Y) + 2 Cov(X, Y) \\
+Cov(X, Y) &= Cor(X,Y) * SD(X) * SD(Y) \\
+\sigma_{sum}^2 &= \sigma^2 + \sigma^2 + 2\rho \sigma^2 
+\end{aligned}
+$$
+
+So:
+
+$$
+\bar{y} = \frac{y_1 + y_2}{2} \sim N(\mu, \frac{\sigma^2(1 + \rho)}{2})
+$$
+
+The likelihood is then:
+
+$$
+L(\mu, \sigma; \bar{y}) = \frac{1}{\sqrt{\sigma^2(1 + \rho)} \sqrt{\pi}} e^{-\frac{1}{2} \left(\frac{\bar{y} - \mu}{\sqrt{\frac{\sigma^2(1 + \rho)}{2}}}\right)^2}
+$$
